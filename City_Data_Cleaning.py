@@ -98,38 +98,56 @@ data['DAYS TO CLOSE'].dtype
 data.loc[data['CREATION DATE'] == '05/20/2020']
 
 
-# In[15]:
+# In[10]:
 
 
-#Calculate Average 'DAYS TO CLOSE' Value for Each Date
+#Calculate Average & Count of 'DAYS TO CLOSE' Value for Each Date
 avg_days_to_close = data.groupby(['CREATION MONTH-DAY', 'CREATION YEAR']).mean()
 avg_days_to_close['DAYS TO CLOSE'] = avg_days_to_close['DAYS TO CLOSE'].round(2)
+avg_days_to_close = avg_days_to_close.rename(columns={'DAYS TO CLOSE':'AVERAGE DAYS TO CLOSE'})
 avg_days_to_close['30-60-90 Days Open Window'] = avg_days_to_close['30-60-90 Days Open Window'].round(2)
+avg_days_to_close = avg_days_to_close.rename(columns={'30-60-90 Days Open Window':'Average 30-60-90 Days Open Window'})
 avg_days_to_close = avg_days_to_close.reset_index(level=['CREATION MONTH-DAY', 'CREATION YEAR'])
-avg_days_to_close
+
+count_days_to_close = data.groupby(['CREATION MONTH-DAY', 'CREATION YEAR']).count()
+count_days_to_close['DAYS TO CLOSE'] = count_days_to_close['DAYS TO CLOSE'].round(2)
+count_days_to_close = count_days_to_close.rename(columns={'DAYS TO CLOSE':'COUNT DAYS TO CLOSE'})
+count_days_to_close['30-60-90 Days Open Window'] = count_days_to_close['30-60-90 Days Open Window'].round(2)
+count_days_to_close = count_days_to_close.rename(columns={'30-60-90 Days Open Window':'Count 30-60-90 Days Open Window'})
+count_days_to_close = count_days_to_close.reset_index(level=['CREATION MONTH-DAY', 'CREATION YEAR'])
+
+agg_days_to_close = avg_days_to_close.join(count_days_to_close, how="inner", lsuffix="", rsuffix="_extra")
+agg_days_to_close
 
 
-# In[18]:
+# In[11]:
 
 
-#Show the Average Days to Close for Each Day
+#Show the Data Types for Averages Table
 avg_days_to_close.dtypes
 
 
-# In[19]:
+# In[12]:
+
+
+#Show the Data Types for Count Table
+count_days_to_close.dtypes
+
+
+# In[13]:
 
 
 #Drop Unneeded Columns
-avg_days_to_close = avg_days_to_close[['CREATION MONTH-DAY', 'CREATION YEAR','DAYS TO CLOSE', '30-60-90 Days Open Window']]
-avg_days_to_close
+agg_days_to_close = agg_days_to_close[['CREATION MONTH-DAY', 'CREATION YEAR', 'AVERAGE DAYS TO CLOSE', 'Average 30-60-90 Days Open Window', 'COUNT DAYS TO CLOSE', 'Count 30-60-90 Days Open Window']]
+agg_days_to_close
 
 
-# In[17]:
+# In[14]:
 
 
 # get the data
-citi_avg_df = avg_days_to_close
-citi_avg_df_mod = citi_avg_df[['CREATION MONTH-DAY', 'CREATION YEAR', 'DAYS TO CLOSE', '30-60-90 Days Open Window']]
+citi_agg_df = agg_days_to_close
+citi_agg_df_mod = citi_agg_df[['CREATION MONTH-DAY', 'CREATION YEAR', 'AVERAGE DAYS TO CLOSE', 'Average 30-60-90 Days Open Window', 'COUNT DAYS TO CLOSE', 'Count 30-60-90 Days Open Window']]
 
 
 # Setup connection to mongodb
@@ -138,50 +156,68 @@ client = pymongo.MongoClient(conn)
 
 # Select database and collection to use
 db = client.citi_data
-calls_avg = db.calls_avg
+calls_agg = db.calls_agg
 
 #Create Dictionary with Data
-data_avg = citi_avg_df_mod.to_dict(orient='records')  # Here's our added param..
+data_agg = citi_agg_df_mod.to_dict(orient='records')  # Here's our added param..
 
 #Remove Existing Documents from Collection
-calls_avg.remove()
+calls_agg.remove()
 
 #Insert Existing Documents into Collection
-calls_avg.insert_many(data_avg)
+calls_agg.insert_many(data_agg)
 
 
-# In[29]:
+# In[15]:
 
 
-#Calculate Average 'DAYS TO CLOSE' Value for Each Date Filtered by 'STATUS' and 'SOURCE'
+#Calculate Average & Count 'DAYS TO CLOSE' Value for Each Date Filtered by 'STATUS' and 'SOURCE'
 avg_days_to_close_filtered = data.groupby(['CREATION MONTH-DAY', 'CREATION YEAR', 'STATUS', 'SOURCE', 'DEPARTMENT']).mean()
 avg_days_to_close_filtered['DAYS TO CLOSE'] = avg_days_to_close_filtered['DAYS TO CLOSE'].round(2)
+avg_days_to_close_filtered = avg_days_to_close_filtered.rename(columns={'DAYS TO CLOSE':'AVERAGE DAYS TO CLOSE'})
 avg_days_to_close_filtered['30-60-90 Days Open Window'] = avg_days_to_close_filtered['30-60-90 Days Open Window'].round(2)
+avg_days_to_close_filtered = avg_days_to_close_filtered.rename(columns={'30-60-90 Days Open Window':'Average 30-60-90 Days Open Window'})
 avg_days_to_close_filtered = avg_days_to_close_filtered.reset_index(level=['CREATION MONTH-DAY', 'CREATION YEAR', 'STATUS', 'SOURCE', 'DEPARTMENT'])
-avg_days_to_close_filtered
+
+count_days_to_close_filtered = data.groupby(['CREATION MONTH-DAY', 'CREATION YEAR', 'STATUS', 'SOURCE', 'DEPARTMENT']).count()
+count_days_to_close_filtered['DAYS TO CLOSE'] = count_days_to_close_filtered['DAYS TO CLOSE'].round(2)
+count_days_to_close_filtered = count_days_to_close_filtered.rename(columns={'DAYS TO CLOSE':'COUNT DAYS TO CLOSE'})
+count_days_to_close_filtered['30-60-90 Days Open Window'] = count_days_to_close_filtered['30-60-90 Days Open Window'].round(2)
+count_days_to_close_filtered = count_days_to_close_filtered.rename(columns={'30-60-90 Days Open Window':'Count 30-60-90 Days Open Window'})
+count_days_to_close_filtered = count_days_to_close_filtered.reset_index(level=['CREATION MONTH-DAY', 'CREATION YEAR', 'STATUS', 'SOURCE', 'DEPARTMENT'])
+
+agg_days_to_close_filtered = avg_days_to_close_filtered.join(count_days_to_close_filtered, how="inner", lsuffix="", rsuffix="_extra")
+agg_days_to_close_filtered
 
 
-# In[30]:
+# In[16]:
 
 
 #Show the Average Days to Close for Each Day
 avg_days_to_close_filtered.dtypes
 
 
-# In[31]:
+# In[17]:
+
+
+#Show the Average Days to Close for Each Day
+count_days_to_close_filtered.dtypes
+
+
+# In[18]:
 
 
 #Drop Unneeded Columns
-avg_days_to_close_filtered = avg_days_to_close_filtered[['CREATION MONTH-DAY', 'CREATION YEAR', 'STATUS', 'SOURCE', 'DEPARTMENT', 'DAYS TO CLOSE', '30-60-90 Days Open Window']]
-avg_days_to_close_filtered
+agg_days_to_close_filtered = agg_days_to_close_filtered[['CREATION MONTH-DAY', 'CREATION YEAR', 'STATUS', 'SOURCE', 'DEPARTMENT', 'AVERAGE DAYS TO CLOSE', 'Average 30-60-90 Days Open Window', 'COUNT DAYS TO CLOSE', 'Count 30-60-90 Days Open Window']]
+agg_days_to_close_filtered
 
 
-# In[35]:
+# In[19]:
 
 
 # get the data
-citi_avg_filtered_df = avg_days_to_close_filtered
-citi_avg_filtered_df_mod = citi_avg_filtered_df[['CREATION MONTH-DAY', 'CREATION YEAR', 'STATUS', 'SOURCE', 'DEPARTMENT', 'DAYS TO CLOSE', '30-60-90 Days Open Window']]
+citi_agg_filtered_df = agg_days_to_close_filtered
+citi_agg_filtered_df_mod = citi_agg_filtered_df[['CREATION MONTH-DAY', 'CREATION YEAR', 'STATUS', 'SOURCE', 'DEPARTMENT', 'AVERAGE DAYS TO CLOSE', 'Average 30-60-90 Days Open Window', 'COUNT DAYS TO CLOSE', 'Count 30-60-90 Days Open Window']]
 
 
 # Setup connection to mongodb
@@ -190,16 +226,16 @@ client = pymongo.MongoClient(conn)
 
 # Select database and collection to use
 db = client.citi_data
-calls_avg_filtered = db.calls_avg_filtered
+calls_agg_filtered = db.calls_agg_filtered
 
 #Create Dictionary with Data
-data_avg_filtered = citi_avg_filtered_df_mod.to_dict(orient='records')  # Here's our added param..
+data_agg_filtered = citi_agg_filtered_df_mod.to_dict(orient='records')  # Here's our added param..
 
 #Remove Existing Documents from Collection
-calls_avg_filtered.remove()
+calls_agg_filtered.remove()
 
 #Insert Existing Documents into Collection
-calls_avg_filtered.insert_many(data_avg_filtered)
+calls_agg_filtered.insert_many(data_agg_filtered)
 
 
 # In[ ]:
