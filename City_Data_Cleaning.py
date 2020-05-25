@@ -3,11 +3,12 @@
 
 # In[1]:
 
-
+import os
 import pandas as pd
 from matplotlib import pyplot as plt
 import datetime as dt
 import pymongo
+os.chdir(r'C:\Users\bjros\OneDrive\Desktop\KU_Data_Analytics_Boot_Camp\Projects\Project_2\citi-service')
 
 
 # In[2]:

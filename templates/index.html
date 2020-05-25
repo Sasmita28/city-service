@@ -23,6 +23,50 @@
         <h1 class="jumbotron">Dashboard</h1>
         <div id="test">HELLO TEAM</div>
   </div>
+  
+    <!--Code to Hide List Bullet Points Found at https://www.w3schools.com/html/tryit.asp?filename=tryhtml_lists_unordered_none-->
+    <div id="list1" class="dropdown-check-list" tabindex="100">
+      <span class="anchor">Select Statuses</span>
+      <ul class="dropdown-menu">
+        <li style="list-style-type:none;"><input type="checkbox" />Open</li>
+        <li style="list-style-type:none;"><input type="checkbox" />Resolved</li>
+        <li style="list-style-type:none;"><input type="checkbox" />Duplicate</li>
+        <li style="list-style-type:none;"><input type="checkbox" />Assigned</li>
+        <li style="list-style-type:none;"><input type="checkbox" />Cancelled</li>
+        <li style="list-style-type:none;"><input type="checkbox" />Failed</li>
+        <li style="list-style-type:none;"><input type="checkbox" />On Hold</li>
+      </ul>
+    </div>
+    <div id="list2" class="dropdown-check-list" tabindex="100">
+      <span class="anchor">Select Sources</span>
+      <ul class="dropdown-menu">
+        <li style="list-style-type:none;"><input type="checkbox" />Online</li>
+        <li style="list-style-type:none;"><input type="checkbox" />Phone</li>
+        <li style="list-style-type:none;"><input type="checkbox" />Email</li>
+        <li style="list-style-type:none;"><input type="checkbox" />Mail</li>
+        <li style="list-style-type:none;"><input type="checkbox" />Walk-in</li>
+      </ul>
+    </div>
+    <div id="list3" class="dropdown-check-list" tabindex="100">
+      <span class="anchor">Select Years</span>
+      <ul class="dropdown-menu">
+        <li><a href="#" class="small" data-value="2020" tabIndex="-1"><input type="checkbox"/>&nbsp;2020</a></li>
+        <li><a href="#" class="small" data-value="2019" tabIndex="-1"><input type="checkbox"/>&nbsp;2019</a></li>
+        <li><a href="#" class="small" data-value="2018" tabIndex="-1"><input type="checkbox"/>&nbsp;2018</a></li>
+        <li><a href="#" class="small" data-value="2017" tabIndex="-1"><input type="checkbox"/>&nbsp;2017</a></li>
+        <li><a href="#" class="small" data-value="2016" tabIndex="-1"><input type="checkbox"/>&nbsp;2016</a></li>
+        <li><a href="#" class="small" data-value="2015" tabIndex="-1"><input type="checkbox"/>&nbsp;2015</a></li>
+        <li><a href="#" class="small" data-value="2014" tabIndex="-1"><input type="checkbox"/>&nbsp;2014</a></li>
+        <li><a href="#" class="small" data-value="2013" tabIndex="-1"><input type="checkbox"/>&nbsp;2013</a></li>
+        <li><a href="#" class="small" data-value="2012" tabIndex="-1"><input type="checkbox"/>&nbsp;2012</a></li>
+        <li><a href="#" class="small" data-value="2011" tabIndex="-1"><input type="checkbox"/>&nbsp;2011</a></li>
+        <li><a href="#" class="small" data-value="2010" tabIndex="-1"><input type="checkbox"/>&nbsp;2010</a></li>
+        <li><a href="#" class="small" data-value="2009" tabIndex="-1"><input type="checkbox"/>&nbsp;2009</a></li>
+        <li><a href="#" class="small" data-value="2008" tabIndex="-1"><input type="checkbox"/>&nbsp;2008</a></li>
+        <li><a href="#" class="small" data-value="2007" tabIndex="-1"><input type="checkbox"/>&nbsp;2007</a></li>
+        <li><a href="#" class="small" data-value="2006" tabIndex="-1"><input type="checkbox"/>&nbsp;2006</a></li>
+      </ul>
+    </div>
   <div>
     {{ calls_info }}
   </div>
