@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify, json, redirect
+from bson.json_util import loads, dumps
 import pymongo
 
 app = Flask(__name__)
@@ -16,14 +17,17 @@ calls_agg_filtered = db.calls_agg_filtered
 
 @app.route("/")
 def index():
-    # write a statement that finds all the items in the db collections and sets them to variables
-    #calls_info = list(calls.find())
-    calls_agg_info = list(calls_agg.find())
-    calls_agg_filtered_info = list(calls_agg_filtered.find())
-    # print(calls_info.head())
-
+    # # write a statement that finds all the items in the db and sets it to a variable
+    calls_info = list(calls.find({}, {'_id': 0}).limit(2))
+    # return render_template("index.html", data=calls_info1)
+    return render_template("index.html", calls_info=calls_info)
+@app.route("/query")
+def query():
+    # # write a statement that finds all the items in the db and sets it to a variable
+    calls_info = list(calls.find({}, {'_id': 0}).limit(2))
     # render an index.html template and pass it the data you retrieved from the database
-    return render_template("index.html", calls_info=[calls_agg_info, calls_agg_filtered_info])
+    return jsonify(calls_info), redirect("/")
+
 
 
 if __name__ == "__main__":
