@@ -1,7 +1,9 @@
 console.log("Hello Team")
 console.log("Hi there.")
+
 d3.json("/query").then((data) => {
     console.log("The data is here.")
+    console.log(data)
 
     //Create Traces
     //Method to Fill Under Curves Found at https://plotly.com/python/filled-area-plots/
@@ -9,14 +11,28 @@ d3.json("/query").then((data) => {
         type:'scatter',
         x: data.map(data => data['creation_month-day']),
         y: data.map(data => data['average_days_to_close']),
-        fill: 'tozeroy'
+        fill: 'tozeroy',
+        transforms: [{
+            type: 'aggregate',
+            groups: 'creation_month-day',
+            aggregations: [
+              {target: 'y', func: 'avg', enabled: true},
+            ]
+          }]
     }];
 
     chart_count = [{
         type:'scatter',
         x: data.map(data => data['creation_month-day']),
         y: data.map(data => data['count_days_to_close']),
-        fill: 'tozeroy'
+        fill: 'tozeroy',
+        transforms: [{
+            type: 'aggregate',
+            groups: 'creation_month-day',
+            aggregations: [
+              {target: 'y', func: 'count', enabled: true},
+            ]
+          }]
     }];
 
     //Create Layout
