@@ -183,7 +183,7 @@ calls_agg_filtered.remove()
 #
 #Insert Existing Documents into Collection
 calls_agg_filtered.insert_many(data_agg_filtered)
-#
+#Close the Client
 client.close()
 #
 print("Data Uploaded!")

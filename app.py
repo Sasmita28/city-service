@@ -7,7 +7,7 @@ conn = "mongodb://localhost:27017"
 client = pymongo.MongoClient(conn)
 # connect to mongo db and collection
 db = client.citi_data
-calls = db.calls
+calls_agg = db.calls_agg
 @app.route("/")
 def index():
     # return render_template("index.html", data=calls_info1)
@@ -15,7 +15,7 @@ def index():
 @app.route("/query")
 def query():
     # # write a statement that finds all the items in the db and sets it to a variable
-    calls_info = list(calls.find({}, {'_id': 0}).limit(1150000))
+    calls_info = list(calls_agg.find({}, {'_id': 0}).limit(1500000))
     # render an index.html template and pass it the data you retrieved from the database
     return jsonify(calls_info)
 if __name__ == "__main__":
