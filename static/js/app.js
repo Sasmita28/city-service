@@ -54,22 +54,28 @@ variables_index.forEach(function(element, index){
 var url = parameter_key.join("");
 
 // print out url 
-console.log(url)
+console.log(url);
 
 d3.json(url).then((data) => {
     console.log("The data is here.")
     console.log(data)
 
+    //Replace All "unknown" Values with None
+    var string = JSON.stringify(data).replace("unknown", null);
+    var data = JSON.parse(string);
+
     //Create Traces
+    //Method to Aggregate Values Found at https://plotly.com/javascript/aggregations/
     //Method to Fill Under Curves Found at https://plotly.com/python/filled-area-plots/
     chart_average = [{
         type:'scatter',
         x: data.map(data => data['creation_month-day']),
-        y: data.map(data => data['average_days_to_close']),
+        y: data.map(data => data['days_to_close']),
+        connectgaps: false,
         fill: 'tozeroy',
         transforms: [{
             type: 'aggregate',
-            groups: 'creation_month-day',
+            groups: data.map(data => data['creation_month-day']), 
             aggregations: [
               {target: 'y', func: 'avg', enabled: true},
             ]
@@ -79,11 +85,12 @@ d3.json(url).then((data) => {
     chart_count = [{
         type:'scatter',
         x: data.map(data => data['creation_month-day']),
-        y: data.map(data => data['count_days_to_close']),
+        y: data.map(data => data['days_to_close']),
+        connectgaps: false,
         fill: 'tozeroy',
         transforms: [{
             type: 'aggregate',
-            groups: 'creation_month-day',
+            groups: data.map(data => data['creation_month-day']),
             aggregations: [
               {target: 'y', func: 'count', enabled: true},
             ]
@@ -93,13 +100,13 @@ d3.json(url).then((data) => {
     //Create Layout
     layout_average = {
         title: "Average Days to Close vs Date",
-        xaxis: {title: "Date"},
+        xaxis: {title: "Date", type:'category', 'categoryorder':'category ascending'},
         yaxis: {title: "Average Days to Close"}
     };
 
     layout_count = {
         title: "Count Days to Close vs Date",
-        xaxis: {title: "Date"},
+        xaxis: {title: "Date", type:'category', 'categoryorder':'category ascending'},
         yaxis: {title: "Count Days to Close"}
     };
 
