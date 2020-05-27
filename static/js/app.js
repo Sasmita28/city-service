@@ -1,7 +1,7 @@
 var department="ignore"
-var status="ignore"
+var status="Resolved"
 var source="Email"
-var year = "2018"
+var year = "2020"
 
 // store variables in an array
 var variables = [department, status, source , year];
@@ -58,5 +58,38 @@ console.log(url)
 
 // call api
 d3.json(url).then((data) => {
-    console.log(data)
+
+    // Groupby department to get count of occurence of calls
+    const groupByDepartment = data.reduce((acc, val) => {
+        acc[val.department] = acc[val.department] + 1 || 1;
+        return acc;
+    }, {});
+
+    // extract label and values
+    var labels = Object.keys(groupByDepartment);
+    var values = Object.values(groupByDepartment);
+
+    console.log(labels)
+    console.log(values)
+
+    var data = [{
+        values: values,
+        labels: labels,
+        domain: {column: 0},
+        name: 'GHG Emissions',
+        hoverinfo: 'label+percent+name',
+        hole: .4,
+        type: 'pie'
+    }];
+      
+    var layout = {
+    title: 'Count of 311 Incidences by Department',
+    height: 400,
+    width: 600,
+    showlegend: true,
+    };
+    
+    Plotly.newPlot('pieChart', data, layout);
+    
 });
+
