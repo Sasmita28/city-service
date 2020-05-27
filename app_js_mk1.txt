@@ -1,8 +1,0 @@
-var department="Water Services"
-var status="Open"
-var source="Phone"
-var year = "2020"
-
-d3.json(`/query/${department}/${status}/${source}/${year}`).then((data) => {
-    console.log(data)
-});

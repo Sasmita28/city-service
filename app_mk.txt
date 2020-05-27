@@ -1,0 +1,57 @@
+
+from flask import Flask, render_template, request, jsonify, json, redirect
+from bson.json_util import loads, dumps
+import pymongo
+import json
+import ast
+
+app = Flask(__name__)
+
+# setup mongo connection
+conn = "mongodb://localhost:27017"
+client = pymongo.MongoClient(conn)
+
+# connect to mongo db and collection
+db = client.citi_data
+calls = db.calls
+
+@app.route("/")
+def index():
+    # return render_template("index.html", data=calls_info1)
+    return render_template("index.html")
+
+@app.route("/query")
+def query():
+
+    # get arguments that were passed to query url
+    args = request.args
+
+    # create empty lists for keys and values
+    keys = []
+    values = []
+
+    #iterate through arg items and extra keys and values 
+    for key, value in args.items():
+        keys.append(key)
+        values.append(value)
+    
+    #create empty list for mongodb query
+    mongo_query = ["{"]
+
+    #iterate through 
+    for i in range(0,len(keys)):
+        if i == 0:
+            mongo_query.append(f'"{keys[i]}": "{values[i]}"')
+        else:
+            mongo_query.append(f', "{keys[i]}": "{values[i]}"')
+
+    mongo_query.append("}")
+    mongo_query_string = "".join(mongo_query)
+    mongo_query_dict = ast.literal_eval(mongo_query_string) 
+
+    calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}))
+
+    return jsonify(calls_info)
+
+if __name__ == "__main__":
+    app.run(debug=True)
