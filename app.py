@@ -54,7 +54,7 @@ def query():
     mongo_query_dict = ast.literal_eval(mongo_query_string) 
 
     # pass the dictionary to the query
-    calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(500000))
+    calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(100000))
 
     # jsonify the response
     return jsonify(calls_info)

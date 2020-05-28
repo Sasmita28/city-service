@@ -1,6 +1,6 @@
 var department="ignore"
 var status="ignore"
-var source="ignore"
+var source="Walk-in"
 var year = "ignore"
 
 // store variables in an array
@@ -50,6 +50,56 @@ variables_index.forEach(function(element, index){
     };
 });
 
+var filterDropdown = d3.selectAll(".form-control")
+filterDropdown.on("change", function() {
+	var statusSelect = d3.select("#Status").node().value;
+	var sourceSelect = d3.select("#Source").node().value;
+	var deptSelect = d3.select("#Department").node().value;
+	var yearSelect = d3.select("#Year").node().value;
+	year = yearSelect
+	department = deptSelect
+	status = statusSelect
+	source = sourceSelect
+		
+	console.log(year)
+	console.log(department)
+	console.log(status)
+    console.log(source)
+    //// starting point for developing query string
+    var parameter_key = ["/query?"]
+    
+    // logic to look at positions of elements within arrays to build query string
+    variables_index.forEach(function(element, index){
+        if (element == 0 && index == 0){
+            parameter_key.push("department=")
+            parameter_key.push(query_variables[index])
+        } else if (element == 0 && index != 0) {
+            parameter_key.push("&department=")
+            parameter_key.push(query_variables[index])
+        } else if (element == 1 && index == 0) {
+            parameter_key.push("status=")
+            parameter_key.push(query_variables[index])
+        } else if (element == 1 && index != 0) {
+            parameter_key.push("&status=")
+            parameter_key.push(query_variables[index])
+        } else if (element == 2 && index == 0) {
+            parameter_key.push("source=")
+            parameter_key.push(query_variables[index])
+        } else if (element == 2 && index != 0) {
+            parameter_key.push("&source=")
+            parameter_key.push(query_variables[index])
+        } else if (element == 3 && index == 0) {
+            parameter_key.push("year=")
+            parameter_key.push(query_variables[index])
+        } else if (element == 3 && index != 0) {
+            parameter_key.push("&year=")
+            parameter_key.push(query_variables[index])
+        };
+    });
+});
+
+
+
 // string together elements of parameter_key array
 var url = parameter_key.join("");
 
@@ -61,21 +111,23 @@ d3.json(url).then((data) => {
     console.log(data)
 
     //Replace All "unknown" Values with None
-    var string = JSON.stringify(data).replace("unknown", null);
-    var data = JSON.parse(string);
+    //Method Found at https://stackoverflow.com/questions/28263868/how-can-i-replace-the-text-in-json-string-with-a-userscript-for-greasemonkey
+    var stringified = JSON.stringify(data);
+    stringified = stringified.replace("unknown", null);
+    var data1 = JSON.parse(stringified);
 
     //Create Traces
     //Method to Aggregate Values Found at https://plotly.com/javascript/aggregations/
     //Method to Fill Under Curves Found at https://plotly.com/python/filled-area-plots/
     chart_average = [{
         type:'scatter',
-        x: data.map(data => data['creation_month-day']),
-        y: data.map(data => data['days_to_close']),
-        connectgaps: false,
+        x: data1.map(data => data['creation_month-day']),
+        y: data1.map(data => data['days_to_close']),
+        connectgaps: true,
         fill: 'tozeroy',
         transforms: [{
             type: 'aggregate',
-            groups: data.map(data => data['creation_month-day']), 
+            groups: data1.map(data => data['creation_month-day']), 
             aggregations: [
               {target: 'y', func: 'avg', enabled: true},
             ]
@@ -84,13 +136,13 @@ d3.json(url).then((data) => {
 
     chart_count = [{
         type:'scatter',
-        x: data.map(data => data['creation_month-day']),
-        y: data.map(data => data['days_to_close']),
+        x: data1.map(data => data['creation_month-day']),
+        y: data1.map(data => data['days_to_close']),
         connectgaps: false,
         fill: 'tozeroy',
         transforms: [{
             type: 'aggregate',
-            groups: data.map(data => data['creation_month-day']),
+            groups: data1.map(data => data['creation_month-day']),
             aggregations: [
               {target: 'y', func: 'count', enabled: true},
             ]
@@ -100,13 +152,13 @@ d3.json(url).then((data) => {
     //Create Layout
     layout_average = {
         title: "Average Days to Close vs Date",
-        xaxis: {title: "Date", type:'category', 'categoryorder':'category ascending'},
+        xaxis: {title: "Date", type:'category'},
         yaxis: {title: "Average Days to Close"}
     };
 
     layout_count = {
         title: "Count Days to Close vs Date",
-        xaxis: {title: "Date", type:'category', 'categoryorder':'category ascending'},
+        xaxis: {title: "Date", type:'category'},
         yaxis: {title: "Count Days to Close"}
     };
 
