@@ -76,17 +76,16 @@ d3.json(url).then((data) => {
         values: values,
         labels: labels,
         domain: {column: 0},
-        name: 'GHG Emissions',
-        hoverinfo: 'label+percent+name',
+        name: 'Department',
+        hoverinfo: 'label+percent',
+        textinfo: "none",
         hole: .4,
         type: 'pie'
     }];
       
     var layout = {
-    title: 'Count of 311 Incidences by Department',
-    height: 400,
-    width: 600,
-    showlegend: true,
+    title: 'Percent Share of 311 Incidences by Department',
+    showlegend: false
     };
     
     Plotly.newPlot('pieChart', data, layout);
