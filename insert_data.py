@@ -3,11 +3,11 @@ import pandas as pd
 
 #GET DATA
 citi_df = pd.read_csv("Resources/311_Call_Center_Service_Requests.csv")
-citi_df_mod = citi_df[['SOURCE','DEPARTMENT','CATEGORY', 'TYPE', 'DETAIL', 'CREATION YEAR','CREATION DATE','CREATION TIME','STATUS','DAYS TO CLOSE','STREET ADDRESS','COUNCIL DISTRICT','LATITUDE', 'LONGITUDE']]
+citi_df_mod = citi_df[['SOURCE','DEPARTMENT','CATEGORY', 'TYPE', 'DETAIL', 'CREATION YEAR','CREATION DATE','CREATION TIME','STATUS','DAYS TO CLOSE','ZIP CODE','STREET ADDRESS','COUNCIL DISTRICT','LATITUDE', 'LONGITUDE']]
 
 #CLEAN DATA
 # 1) Rename Columns & convert year to string
-citi_df_mod.columns = ['source', 'department', 'category', 'type', 'detail','year','creation_date', 'creation_time','status', 'days_to_close', 'street_address', 'council_district','lat','lon']
+citi_df_mod.columns = ['source', 'department', 'category', 'type', 'detail','year','creation_date', 'creation_time','status', 'days_to_close', 'zip_code','street_address', 'council_district','lat','lon']
 citi_df_mod['year'] = citi_df_mod['year'].astype(str)
 
 
@@ -29,6 +29,7 @@ citi_df_mod['creation_month-day']
 
 # 3) Fill in NaN
 citi_df_mod = citi_df_mod.fillna("unknown")
+# citi_df_mod = citi_df_mod.dropna(how='any')
 
 # 4) Filter by Source
 citi_df_mod = citi_df_mod.loc[(citi_df_mod["source"] == "WEB") | (citi_df_mod["source"] == "PHONE") |(citi_df_mod["source"] == "EMAIL") |(citi_df_mod["source"] == "WALK") | (citi_df_mod["source"] == "MAIL") ]
