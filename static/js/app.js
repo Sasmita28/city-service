@@ -61,6 +61,10 @@ function initLines() {
         console.log("The data is here.")
         console.log(data)
 
+        //Sort Data by Month-Day
+        //Method to Sort by Strings Found at https://stackoverflow.com/questions/51165/how-to-sort-strings-in-javascript
+        var data = data.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
+
         //Define Variables for Columns
         var type = data.map(row => row.type);
         
@@ -237,6 +241,10 @@ function buildChart() {
     d3.json(url).then((data) => {
         console.log("The data is here.")
         console.log(data)
+
+        //Sort Data by Month-Day
+        //Method to Sort by Strings Found at https://stackoverflow.com/questions/51165/how-to-sort-strings-in-javascript
+        var data = data.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
     
         //Define Variables for Columns
         var type = data.map(row => row.type);

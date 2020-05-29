@@ -59,10 +59,6 @@ citi_df_mod["department"] = citi_df_mod["department"].str.replace("Parks & Recre
 citi_df_mod["department"] = citi_df_mod["department"].str.replace("Parks & Rec","Parks & Recreation")
 citi_df_mod["department"] = citi_df_mod["department"].str.replace("Parks and Rec","Parks & Recreation")
 
-# 8) Sort the Data by Ascending Month-Day
-citi_df_mod = citi_df_mod.sort_values("creation_month-day", ascending=True)
-citi_df_mod
-
 # Setup connection to mongodb
 conn = "mongodb://localhost:27017"
 client = pymongo.MongoClient(conn)
