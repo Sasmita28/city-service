@@ -144,14 +144,14 @@ function initLines() {
         //Create Layout
         layout_average = {
             title: "Average Days to Close vs Date",
-            xaxis: {title: "Date", type:'category', categoryorder:'category ascending'},
-            yaxis: {title: "Average Days to Close", type:'category', 'categoryorder':'category ascending'}
+            xaxis: {title: "Date"},
+            yaxis: {title: "Average Days to Close"}
         };
 
         layout_count = {
             title: "Count Days to Close vs Date",
-            xaxis: {title: "Date", type:'category', categoryorder:'category ascending'},
-            yaxis: {title: "Count Days to Close", type:'category', 'categoryorder':'category ascending'}
+            xaxis: {title: "Date"},
+            yaxis: {title: "Count Days to Close"}
         };
 
         //Assign Plot to ID
