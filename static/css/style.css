@@ -32,8 +32,29 @@ html {
   padding: 20px;
   margin: 0;
   background: rgb(19, 130, 145);
-  background-image: url("kcsky.jpg");
+  background-image: url("kcsky.jpeg");
   background-attachment: scroll;
   background-position: bottom center;
   background-size: cover;
+}
+
+#bar {
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+  }
+  
+#pie {
+max-width: 100%;
+max-height: 100%;
+}
+
+#line1 {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#line2{
+    max-width: 100%;
+    max-height: 100%;
 }

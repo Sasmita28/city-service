@@ -141,10 +141,9 @@ function buildChart() {
 
     initBar();
     initPie();
-    initMap();
     initLine1();
     initLine2();
-   
+    initMap();
     // optionChanged();
     // ************* for Map ************
     function initMap() {
