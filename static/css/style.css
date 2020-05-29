@@ -37,24 +37,3 @@ html {
   background-position: bottom center;
   background-size: cover;
 }
-
-#bar {
-    max-width: 100%;
-    max-height: 100%;
-    position: absolute;
-  }
-  
-#pie {
-max-width: 100%;
-max-height: 100%;
-}
-
-#line1 {
-    max-width: 100%;
-    max-height: 100%;
-}
-
-#line2{
-    max-width: 100%;
-    max-height: 100%;
-}

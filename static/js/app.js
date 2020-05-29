@@ -434,4 +434,3 @@ function updateLine2(x,y,groups) {
   Plotly.restyle("line2","y",[y2]);
   Plotly.restyle("line2","groups",[groups]);   
 }
-
