@@ -69,22 +69,22 @@ function buildChart() {
 
   // filterYear();
   var url = createQuery(variables);
-  d3.json(url).then(data => {
+  d3.json(url).then(json_data => {
   console.log(url)
-  console.log(data.length);
+  console.log(json_data.length);
 
 
   //  console.log(data)
 
-    var source = data.map(row => row.source);
-    var status = data.map(row => row.status);
-    var department = data.map(row => row.department);
-    var year = data.map(row => row.year);
-    var type = data.map(row => row.type);
+    var source = json_data.map(row => row.source);
+    var status = json_data.map(row => row.status);
+    var department = json_data.map(row => row.department);
+    var year = json_data.map(row => row.year);
+    var type = json_data.map(row => row.type);
 
     // for Mike's Pie Chart
     // Groupby department to get count of occurence of calls
-    const groupByDepartment = data.reduce((acc, val) => {
+    const groupByDepartment = json_data.reduce((acc, val) => {
       acc[val.department] = acc[val.department] + 1 || 1;
       return acc;
       }, {});
@@ -99,7 +99,7 @@ function buildChart() {
     // for ben's Line Chart calculations****Part-1****
       //Sort Data by Month-Day
         //Method to Sort by Strings Found at https://stackoverflow.com/questions/51165/how-to-sort-strings-in-javascript
-        var data = data.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
+        var data = json_data.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
     // ***********************************
 
     var result = [];
@@ -144,13 +144,13 @@ function buildChart() {
     initLine1();
     initLine2();
     initMap();
-   
     // optionChanged();
     // ************* for Map ************
     function initMap() {
         //Before Initializing the Map, Check if Map is Already Initialized or Not
         //Method found at https://help.openstreetmap.org/questions/12935/error-map-container-is-already-initialized
         var container = L.DomUtil.get('map'); if(container != null){ container._leaflet_id = null; }
+
       // Create a map object
       var myMap = L.map("map", {
         center: [39.0997, -94.5786],
@@ -161,31 +161,105 @@ function buildChart() {
         attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
         maxZoom: 18,
         id: "mapbox.light",
+        // tileSize: 60,
+        // zoomOffset: -1,  
         accessToken: API_KEY
       }).addTo(myMap);
 
-      var heatArray = [];
+      
+      // extracting the zip code from json_data and the grouping by zipcode to see the number of call counts per zipcode
+      var zipCode = json_data.map(row => row.zip_code);
+      var countCalls = [];
+        var countCalls = zipCode.reduce((total, value) => {
+          total[value] = (total[value] || 0) + 1;
+          countCalls.push(total)
+          return total;
+          },
+        {});
 
-      for (var i = 0; i < data.length; i++) {
-        var location = data[i]["zip code"];
+    // Separating the zipcodes and their counts
+    var zipcode_unique = Object.keys(countCalls);
+    var call_counts = Object.values(countCalls);
+    //  console.log(zipcode_unique[0]);
+  
+    // filtering json_data for the unique zipcodes
+    var data_filter =[];
+    var lat = [];
+    for (i=0;i< zipcode_unique.length ;i++){
+      data_filter.push(json_data.filter( element => element.zip_code == zipcode_unique[i]));
+       
+    }
+ 
+   
+    // console.log(data_filter);
+    // Extracting only the latlongs from the array of arrays
+
+    var latlons= data_filter.map(arr => arr.map(element => `${element.lat},${element.lon}`) );
+
+
+   
+    // console.log(data_filter);
     
+    
+    // making these latlong elements as list and converting them to numbers again
+   var latlong1 =latlons.map(arr => arr.map(element => ([element])));
+
+   
+    var latlong2 = latlong1.map(arr =>arr.map(element => (element[0].split(',').map(x=>+x))) );
+
+    
+  //  Extracting the lats and longs separately
+    var lat = latlong2.map(num =>num.map(item=> item[0]));
+    var long = latlong2.map(num =>num.map(item=> item[1]));
+  
+    // console.log(lat);
+    for (var i = 0; i < zipcode_unique.length; i++) {
+        if (zipcode_unique && call_counts)
+          L.marker([lat[i][0], long[i][0]]).bindPopup("<h5><h5>Zip: "  + zipcode_unique[i] + "</h5>"+ "<h5><h5>Call Count: " + call_counts[i] + "</h5>").addTo(myMap);
+          // console.log([lat[i][0]]);
+    
+     
+    }
+  // Initializing the heat array
+    var heatArray = [];
+      
+    for (var i = 0; i < zipcode_unique.length; i++) {
+      for( var j= 0; j< call_counts[i];j++){
+
+        var location = latlong2[i];
+  
         if (location) {
-          heatArray.push([location]);
+          heatArray.push([location[j][0], location[j][1]]);
+          
+          // console.log([location[j][1]]);
         }
       }
-    
-      var heat = L.heatLayer(heatArray, {
-        radius: 20,
-        blur: 35
-      }).addTo(myMap);
+      
+    }
+  
+  //  console.log(heatArray);
+  
+
+  var heat = L.heatLayer(heatArray, {
+    radius:10,
+    blur:35,
+    maxZoom:15
+  }).addTo(myMap);
+
+   
+
+
+
+  
+     
     };
    // ************* End Map ************
   //*****************For Line Chart1***********
    function initLine1() {
     chart_average = [{
       type:'scatter',
-      x: data1.map(data => data['creation_month-day']),
-      y: data1.map(data => data['days_to_close']),
+      x: data1.map(data=> data['creation_month-day']),
+      y: data1.map(data =>data['days_to_close']),
       connectgaps: true,
       fill: 'tozeroy',
       transforms: [{
@@ -202,10 +276,13 @@ function buildChart() {
     layout_average = {
       title: "Average Days to Close vs Date",
       xaxis: {title: "Date"},
-      yaxis: {title: "Average Days to Close"},
-    };
+      yaxis: {title: "Average Days to Close"}
+  };
+
     var config = {responsive: true}
     Plotly.newPlot("line1", chart_average, layout_average, config);
+    // Plotly.newPlot("line1", chart_average, layout_average);
+ 
    
   };
   //*************End Line Chart1********************************
@@ -219,7 +296,7 @@ function buildChart() {
         fill: 'tozeroy',
         transforms: [{
             type: 'aggregate',
-            groups: data1.map(data => data['creation_month-day']),
+            groups: data1.map(data=> data['creation_month-day']),
             aggregations: [
             {target: 'y', func: 'count', enabled: true},
             ]
@@ -229,10 +306,11 @@ function buildChart() {
     layout_count = {
       title: "Count Days to Close vs Date",
       xaxis: {title: "Date"},
-      yaxis: {title: "Count Days to Close"},
-        };
-        var config = {responsive: true}
-      Plotly.newPlot("line2", chart_count, layout_count, config);
+      yaxis: {title: "Count Days to Close"}
+  };
+    var config = {responsive: true}
+    Plotly.newPlot("line2", chart_count, layout_count, config);
+    // Plotly.newPlot("line2", chart_count, layout_count);
      
     };
     //*************End Line Chart1********************************
@@ -251,11 +329,13 @@ function buildChart() {
       }];
     
       var layout = {
-        height: 800,
-        width: 650
-      };
+        title: 'No.of calls per request',
+        // showlegend: false
+        };
+    
       var config = {responsive: true}
       Plotly.newPlot("bar", data, layout, config);
+      // Plotly.newPlot("bar", data, layout);
      
     };
    // ************* End bar chart **********************************
@@ -278,8 +358,10 @@ function buildChart() {
       title: 'Percent Share of 311 Incidences by Department',
       showlegend: false
       };
+      
       var config = {responsive: true}
-      Plotly.newPlot('pie', data, layout, config);
+      Plotly.newPlot("pie", data, layout, config);
+      // Plotly.newPlot("pie", data, layout);
     };
    // ************* End Pie chart **********************************
 
@@ -317,24 +399,24 @@ var variables = [department, status, source , year];
 
 
 
-    d3.json(url).then(data => {
+    d3.json(url).then(json_data => {
 
       
     console.log(url);
     // console.log(data);
-    console.log(data.length);
+    console.log(json_data.length);
 
-      var source = data.map(row => row.source);
-      var status = data.map(row => row.status);
-      var department = data.map(row => row.department);
-      var year = data.map(row => row.year);
-      var type = data.map(row => row.type);
+      var source = json_data.map(row => row.source);
+      var status = json_data.map(row => row.status);
+      var department = json_data.map(row => row.department);
+      var year = json_data.map(row => row.year);
+      var type = json_data.map(row => row.type);
 
       // console.log(type);
 
       // for Mike's Pie Chart
     // Groupby department to get count of occurence of calls
-    const groupByDepartment = data.reduce((acc, val) => {
+    const groupByDepartment = json_data.reduce((acc, val) => {
       acc[val.department] = acc[val.department] + 1 || 1;
       return acc;
       }, {});
@@ -345,7 +427,7 @@ var variables = [department, status, source , year];
       
         // console.log(labels)
         // console.log(values)
-      var data = data.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
+      var data = json_data.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
     // *******************
 
 
@@ -450,5 +532,5 @@ function updateLine2(x,y,groups) {
   
   Plotly.restyle("line2","x",[x2]);
   Plotly.restyle("line2","y",[y2]);
-  Plotly.restyle("line2","groups",[groups]);
+  Plotly.restyle("line2","groups",[groups]);   
 }
