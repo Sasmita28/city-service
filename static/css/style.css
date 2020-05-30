@@ -15,9 +15,9 @@ html {
   padding-bottom: 130px;
   overflow: auto;
 }
-.table-primary {
+/* .table-primary {
   font-weight: bold;
-}
+} */
 .footer > .bottom {
   position: absolute;
   right: 0;
@@ -26,7 +26,7 @@ html {
   padding: 5px;
   background: #1B3146;
 }
-.hero {
+.hero-image {
   position: relative;
   height: 450px;
   padding: 20px;
@@ -37,3 +37,23 @@ html {
   background-position: bottom center;
   background-size: cover;
 }
+
+.container {
+  text-align: center;
+  font-weight: normal;
+  text-decoration-color: ivory; 
+  margin: 0 auto;
+  overflow: hidden;
+}
+​
+.th {
+  line-height: 75px;
+  text-align: right;
+  font-size: x-large;
+  
+}
+​
+.form-group {
+  font-size: large;
+}
+​
