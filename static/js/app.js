@@ -265,7 +265,7 @@ function buildChart() {
       connectgaps: true,
       mode: 'lines',
       line: {
-        color: '#edaf88',
+        color: '#5BB7DC',
         width: 2},      
       fill: 'tozeroy',
       transforms: [{
@@ -303,7 +303,7 @@ function buildChart() {
         connectgaps: true,
         mode: 'lines',
         line: {
-          color: '#edaf88',
+          color: '#5BB7DC',
           width: 2},  
         fill: 'tozeroy',
         transforms: [{
