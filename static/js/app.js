@@ -146,9 +146,13 @@ function buildChart() {
     initMap();
     // optionChanged();
     // ************* for Map ************
+    // var myMap = null;
     function initMap() {
+
+      
+      // var container = L.DomUtil.get('map');if(container != null ) {container.leaflet_id = null;}
       // Create a map object
-      var myMap = L.map("map", {
+      var myMap =L.map("map", {
         center: [39.0997, -94.5786],
         zoom: 13
       });
@@ -173,18 +177,18 @@ function buildChart() {
           },
         {});
 
-    // Separating the zipcodes and their counts
-    var zipcode_unique = Object.keys(countCalls);
-    var call_counts = Object.values(countCalls);
-    //  console.log(zipcode_unique[0]);
-  
-    // filtering json_data for the unique zipcodes
-    var data_filter =[];
-    var lat = [];
-    for (i=0;i< zipcode_unique.length ;i++){
-      data_filter.push(json_data.filter( element => element.zip_code == zipcode_unique[i]));
-       
-    }
+      // Separating the zipcodes and their counts
+      var zipcode_unique = Object.keys(countCalls);
+      var call_counts = Object.values(countCalls);
+      //  console.log(zipcode_unique[0]);
+    
+      // filtering json_data for the unique zipcodes
+      var data_filter =[];
+      var lat = [];
+      for (i=0;i< zipcode_unique.length ;i++){
+        data_filter.push(json_data.filter( element => element.zip_code == zipcode_unique[i]));
+        
+      }
  
    
     // console.log(data_filter);
@@ -209,13 +213,13 @@ function buildChart() {
     var long = latlong2.map(num =>num.map(item=> item[1]));
   
     // console.log(lat);
-    for (var i = 0; i < zipcode_unique.length; i++) {
+    // for (var i = 0; i < zipcode_unique.length; i++) {
               
-          L.marker([lat[i][0], long[i][0]]).bindPopup("<h5><h5>Zip: "  + zipcode_unique[i] + "</h5>"+ "<h5><h5>Call Count: " + call_counts[i] + "</h5>").addTo(myMap);
-          // console.log([lat[i][0]]);
+    //       L.marker([lat[i][0], long[i][0]]).bindPopup("<h5><h5>Zip: "  + zipcode_unique[i] + "</h5>"+ "<h5><h5>Call Count: " + call_counts[i] + "</h5>").addTo(myMap);
+    //       // console.log([lat[i][0]]);
     
      
-    }
+    // }
   // Initializing the heat array
     var heatArray = [];
       
@@ -239,13 +243,15 @@ function buildChart() {
   var heat = L.heatLayer(heatArray, {
     radius:10,
     blur:35,
-    maxZoom:15
+    maxZoom:15,
+    // gradient: {
+    //   0.0: 'blue',
+    //   // 0.5: 'yellow',
+    //   1.0: 'red'
+    // }
   }).addTo(myMap);
 
-   
-
-
-
+  
   
      
     };
@@ -257,6 +263,10 @@ function buildChart() {
       x: data1.map(data=> data['creation_month-day']),
       y: data1.map(data =>data['days_to_close']),
       connectgaps: true,
+      mode: 'lines',
+      line: {
+        color: '#edaf88',
+        width: 2},      
       fill: 'tozeroy',
       transforms: [{
           type: 'aggregate',
@@ -270,9 +280,11 @@ function buildChart() {
 
     //Create Layout
     layout_average = {
-      title: "Average Days to Close vs Date",
-      xaxis: {title: "Date"},
-      yaxis: {title: "Average Days to Close"}
+      title: '<b>'+'Average Days to Close vs Date'+'</b>',
+      xaxis: {title: '<b>'+'Date'+'</b>',
+      automargin: true},
+      yaxis: {title: '<b>'+'Average days to Close'+'<b>',
+      automargin: true}
   };
 
     var config = {responsive: true}
@@ -289,6 +301,10 @@ function buildChart() {
         x: data1.map(data => data['creation_month-day']),
         y: data1.map(data => data['days_to_close']),
         connectgaps: true,
+        mode: 'lines',
+        line: {
+          color: '#edaf88',
+          width: 2},  
         fill: 'tozeroy',
         transforms: [{
             type: 'aggregate',
@@ -300,10 +316,14 @@ function buildChart() {
     }];
   
     layout_count = {
-      title: "Count Days to Close vs Date",
-      xaxis: {title: "Date"},
-      yaxis: {title: "Count Days to Close"}
-  };
+      title: '<b>'+'Count Days to Close vs Date'+'</b>',
+      xaxis: {title:'<b>'+ 'Date'+'</b>',
+      automargin: true},
+      yaxis: {title: '<b>'+'Count Days to Close'+'</b>',
+      automargin: true},
+      
+    
+    };
     var config = {responsive: true}
     Plotly.newPlot("line2", chart_count, layout_count, config);
     // Plotly.newPlot("line2", chart_count, layout_count);
@@ -325,8 +345,10 @@ function buildChart() {
       }];
     
       var layout = {
-        title: 'No.of calls per request',
-        // showlegend: false
+        title: '<b>'+'No.of calls per request'+'</b>',
+        yaxis: {
+          automargin: true
+          }
         };
     
       var config = {responsive: true}
@@ -347,14 +369,15 @@ function buildChart() {
         hoverinfo: 'label+percent',
         textinfo: "none",
         hole: .4,
+        marker:{
+          colors: ['#DC97A9', '#F2CB7C', '#EDAF88', '#D3BFB6', '#ADDAD7','#DC97A9', '#F2CB7C', '#EDAF88', '#D3BFB6', '#ADDAD7', '#DC97A9', '#F2CB7C', '#EDAF88', '#D3BFB6', '#ADDAD7','#DC97A9', '#F2CB7C', '#EDAF88', '#D3BFB6', '#ADDAD7'].reverse()
+        },
         type: 'pie'
     }];
-      
       var layout = {
-      title: 'Percent Share of 311 Incidences by Department',
-      showlegend: false
+      title: '<b>'+'Percent Share of 311 Incidences by Department'+'</b>',
+      showlegend: true
       };
-      
       var config = {responsive: true}
       Plotly.newPlot("pie", data, layout, config);
       // Plotly.newPlot("pie", data, layout);
@@ -488,6 +511,7 @@ var variables = [department, status, source , year];
       updatePie(values,labels,domain);
       updateLine1(x,y,groups);
       updateLine2(x,y,groups);
+      updateMap();
 
 
     });
@@ -499,6 +523,8 @@ var variables = [department, status, source , year];
 
 
 // optionChanged();
+
+
 
 
 function updateBar(x,y,text) {
@@ -529,4 +555,125 @@ function updateLine2(x,y,groups) {
   Plotly.restyle("line2","x",[x2]);
   Plotly.restyle("line2","y",[y2]);
   Plotly.restyle("line2","groups",[groups]);   
+}
+
+function updateMap(){
+
+  var url = createQuery(variables);
+
+  d3.json(url).then(json_data => {
+
+    var container = L.DomUtil.get('map');
+    if(container != null){
+    container._leaflet_id = null;
+    }
+
+    // myMap.invalidateSize()
+    // var container = L.DomUtil.get('map');if(container != null ) {container.leaflet_id = null;}
+      // Create a map object
+      var myMap =L.map("map", {
+        center: [39.0997, -94.5786],
+        zoom: 13
+      });
+
+      L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox.light",
+        // tileSize: 60,
+        // zoomOffset: -1,  
+        accessToken: API_KEY
+      }).addTo(myMap);
+
+      
+      // extracting the zip code from json_data and the grouping by zipcode to see the number of call counts per zipcode
+      var zipCode = json_data.map(row => row.zip_code);
+      var countCalls = [];
+        var countCalls = zipCode.reduce((total, value) => {
+          total[value] = (total[value] || 0) + 1;
+          countCalls.push(total)
+          return total;
+          },
+        {});
+
+      // Separating the zipcodes and their counts
+      var zipcode_unique = Object.keys(countCalls);
+      var call_counts = Object.values(countCalls);
+      //  console.log(zipcode_unique[0]);
+    
+      // filtering json_data for the unique zipcodes
+      var data_filter =[];
+      var lat = [];
+      for (i=0;i< zipcode_unique.length ;i++){
+        data_filter.push(json_data.filter( element => element.zip_code == zipcode_unique[i]));
+        
+      }
+
+  
+    // console.log(data_filter);
+    // Extracting only the latlongs from the array of arrays
+
+    var latlons= data_filter.map(arr => arr.map(element => `${element.lat},${element.lon}`) );
+
+
+  
+    // console.log(data_filter);
+    
+    
+    // making these latlong elements as list and converting them to numbers again
+  var latlong1 =latlons.map(arr => arr.map(element => ([element])));
+
+  
+    var latlong2 = latlong1.map(arr =>arr.map(element => (element[0].split(',').map(x=>+x))) );
+
+    
+  //  Extracting the lats and longs separately
+    var lat = latlong2.map(num =>num.map(item=> item[0]));
+    var long = latlong2.map(num =>num.map(item=> item[1]));
+
+    // console.log(lat);
+    // for (var i = 0; i < zipcode_unique.length; i++) {
+              
+    //       L.marker([lat[i][0], long[i][0]]).bindPopup("<h5><h5>Zip: "  + zipcode_unique[i] + "</h5>"+ "<h5><h5>Call Count: " + call_counts[i] + "</h5>").addTo(myMap);
+    //       // console.log([lat[i][0]]);
+    
+    
+    // }
+  // Initializing the heat array
+    var heatArray = [];
+      
+    for (var i = 0; i < zipcode_unique.length; i++) {
+      for( var j= 0; j< call_counts[i];j++){
+
+        var location = latlong2[i];
+
+        if (location) {
+          heatArray.push([location[j][0], location[j][1]]);
+          
+          // console.log([location[j][1]]);
+        }
+      }
+      
+    }
+
+  //  console.log(heatArray);
+
+
+  var heat = L.heatLayer(heatArray, {
+    radius:10,
+    blur:35,
+    maxZoom:15,
+  //   gradient: {
+  //     0.0: 'blue',
+  //     // 0.5: 'yellow',
+  //     1.0: 'red'
+  // }
+  }).addTo(myMap);
+
+
+
+   
+
+  });
+
 }
