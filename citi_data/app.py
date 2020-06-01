@@ -3,12 +3,24 @@ from bson.json_util import loads, dumps
 import pymongo
 import json
 import ast
+import os
 
 app = Flask(__name__)
 
 # setup mongo connection
-conn = "mongodb://localhost:27017"
-client = pymongo.MongoClient(conn)
+
+MONGO_URL = os.environ.get('MONGO_URL')
+if not MONGO_URL:
+
+    MONGO_URL = "mongodb://localhost:27017"
+
+app = Flask(__name__)
+
+app.config['MONGO_URI'] = MONGO_URL
+client = pymongo.MongoClient(MONGO_URL)
+
+# conn = "mongodb://localhost:27017"
+
 
 # connect to mongo db and collection
 db = client.citi_data
