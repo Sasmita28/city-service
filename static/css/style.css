@@ -91,6 +91,8 @@ h1 {
   width: 100%;
   height: 650px;
   object-fit: cover;
+  position: relative;
+  margin: auto;
   
 }
 
@@ -98,12 +100,34 @@ h1 {
   width: 100%;
   height: 650px;
   object-fit: cover;
+  position: relative;
+  margin: auto;
   
 
 }
 
-#description {
-  font-family:Georgia;
+#description {  font-family:Georgia;
 }
 
+p {  
+  font-family:Georgia;
+  font-size: 20px;
+  color: black;
+  /* height: 50px; */
+  /* width: 100%; */
+  /* position: relative; */
+  margin-top: 0px;
+  width: 85%;
+}
+
+
+li {  
+  font-family:Georgia;
+  font-size: 20px;
+  color: black;
+  /* height: 50px; */
+  /* width: 100%; */
+  /* position: relative; */
+  margin-top: 0px;
+}
 

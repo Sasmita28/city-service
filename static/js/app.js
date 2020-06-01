@@ -1,3 +1,5 @@
+
+
 var department="ignore"
 var status="ignore"
 var source="ignore"
@@ -5,6 +7,8 @@ var year = "2020"
 
 // store variables in an array
 var variables = [department, status, source , year];
+
+
 
 function createQuery(variables){
   // create empty arrays for manipulating elements and indexes
@@ -18,7 +22,7 @@ function createQuery(variables){
           variables_index.push(index)
       };
   });
-
+  
   // starting point for developing query string
   var parameter_key = ["/query?"]
 
@@ -49,11 +53,19 @@ function createQuery(variables){
           parameter_key.push("&year=")
           parameter_key.push(query_variables[index])
       };
+      
   });
 
-  // string together elements of parameter_key array
-  var url = parameter_key.join("");
-
+  
+    if(query_variables[0] ==='ignore' && query_variables[1] ==='ignore' && query_variables[2] ==='ignore' && query_variables[3] ==='ignore'){
+      var url = '/query';
+    }
+    else { 
+      // string together elements of parameter_key array
+      var url = parameter_key.join("");
+    }
+ 
+    
   // print out url 
   // console.log(url)
   return url;
@@ -69,22 +81,22 @@ function buildChart() {
 
   // filterYear();
   var url = createQuery(variables);
-  d3.json(url).then(json_data => {
+  d3.json(url).then(data => {
   console.log(url)
-  console.log(json_data.length);
+  console.log(data.length);
 
 
   //  console.log(data)
 
-    var source = json_data.map(row => row.source);
-    var status = json_data.map(row => row.status);
-    var department = json_data.map(row => row.department);
-    var year = json_data.map(row => row.year);
-    var type = json_data.map(row => row.type);
+    var source = data.map(row => row.source);
+    var status = data.map(row => row.status);
+    var department = data.map(row => row.department);
+    var year = data.map(row => row.year);
+    var type = data.map(row => row.type);
 
     // for Mike's Pie Chart
     // Groupby department to get count of occurence of calls
-    const groupByDepartment = json_data.reduce((acc, val) => {
+    const groupByDepartment = data.reduce((acc, val) => {
       acc[val.department] = acc[val.department] + 1 || 1;
       return acc;
       }, {});
@@ -99,7 +111,7 @@ function buildChart() {
     // for ben's Line Chart calculations****Part-1****
       //Sort Data by Month-Day
         //Method to Sort by Strings Found at https://stackoverflow.com/questions/51165/how-to-sort-strings-in-javascript
-        var data = json_data.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
+        var data = data.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
     // ***********************************
 
     var result = [];
@@ -168,7 +180,7 @@ function buildChart() {
 
       
       // extracting the zip code from json_data and the grouping by zipcode to see the number of call counts per zipcode
-      var zipCode = json_data.map(row => row.zip_code);
+      var zipCode = data.map(row => row.zip_code);
       var countCalls = [];
         var countCalls = zipCode.reduce((total, value) => {
           total[value] = (total[value] || 0) + 1;
@@ -186,7 +198,7 @@ function buildChart() {
       var data_filter =[];
       var lat = [];
       for (i=0;i< zipcode_unique.length ;i++){
-        data_filter.push(json_data.filter( element => element.zip_code == zipcode_unique[i]));
+        data_filter.push(data.filter( element => element.zip_code == zipcode_unique[i]));
         
       }
  
@@ -241,12 +253,12 @@ function buildChart() {
   
 
   var heat = L.heatLayer(heatArray, {
-    radius:10,
-    blur:35,
+    radius:20,
+    blur:25,
     maxZoom:15,
     // gradient: {
     //   0.0: 'blue',
-    //   // 0.5: 'yellow',
+    //   0.5: 'yellow',
     //   1.0: 'red'
     // }
   }).addTo(myMap);
@@ -263,10 +275,6 @@ function buildChart() {
       x: data1.map(data=> data['creation_month-day']),
       y: data1.map(data =>data['days_to_close']),
       connectgaps: true,
-      mode: 'lines',
-      line: {
-        color: '#5BB7DC',
-        width: 2},      
       fill: 'tozeroy',
       transforms: [{
           type: 'aggregate',
@@ -281,10 +289,9 @@ function buildChart() {
     //Create Layout
     layout_average = {
       title: '<b>'+'Average Days to Close vs Date'+'</b>',
-      xaxis: {title: '<b>'+'Date'+'</b>',
-      automargin: true},
-      yaxis: {title: '<b>'+'Average days to Close'+'<b>',
-      automargin: true}
+      xaxis: {title: '<b>'+'Date'+'</b>'},
+      yaxis: {title: '<b>'+'Average days to Close'+'<b>'},
+      
   };
 
     var config = {responsive: true}
@@ -301,10 +308,6 @@ function buildChart() {
         x: data1.map(data => data['creation_month-day']),
         y: data1.map(data => data['days_to_close']),
         connectgaps: true,
-        mode: 'lines',
-        line: {
-          color: '#5BB7DC',
-          width: 2},  
         fill: 'tozeroy',
         transforms: [{
             type: 'aggregate',
@@ -317,10 +320,8 @@ function buildChart() {
   
     layout_count = {
       title: '<b>'+'Count Days to Close vs Date'+'</b>',
-      xaxis: {title:'<b>'+ 'Date'+'</b>',
-      automargin: true},
-      yaxis: {title: '<b>'+'Count Days to Close'+'</b>',
-      automargin: true},
+      xaxis: {title:'<b>'+ 'Date'+'</b>'},
+      yaxis: {title: '<b>'+'Count Days to Close'+'</b>'},
       
     
     };
@@ -409,33 +410,38 @@ filterDropdown.on("change", function() {
 
 
 
-var variables = [department, status, source , year];
+  var variables = [department, status, source , year];
+
+  console.log(variables);
+
+  if(department ==='ignore' && status ==='ignore' && source ==='ignore' && year ==='ignore'){
+    var url = '/query';
+  }
+  
+  else {
+     var url = createQuery(variables);
+  };
+ 
 
 
-    console.log(variables)
-
-    var url = createQuery(variables);
-
-
-
-    d3.json(url).then(json_data => {
+d3.json(url).then(data => {
 
       
     console.log(url);
     // console.log(data);
-    console.log(json_data.length);
+    console.log(data.length);
 
-      var source = json_data.map(row => row.source);
-      var status = json_data.map(row => row.status);
-      var department = json_data.map(row => row.department);
-      var year = json_data.map(row => row.year);
-      var type = json_data.map(row => row.type);
+      var source = data.map(row => row.source);
+      var status = data.map(row => row.status);
+      var department = data.map(row => row.department);
+      var year = data.map(row => row.year);
+      var type = data.map(row => row.type);
 
       // console.log(type);
 
       // for Mike's Pie Chart
     // Groupby department to get count of occurence of calls
-    const groupByDepartment = json_data.reduce((acc, val) => {
+    const groupByDepartment =data.reduce((acc, val) => {
       acc[val.department] = acc[val.department] + 1 || 1;
       return acc;
       }, {});
@@ -446,7 +452,7 @@ var variables = [department, status, source , year];
       
         // console.log(labels)
         // console.log(values)
-      var data = json_data.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
+      var data = data.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
     // *******************
 
 
@@ -491,7 +497,7 @@ var variables = [department, status, source , year];
           
         
         
-          console.log(sliced);
+          // console.log(sliced);
           
           x= sliced.map(item=>item[1]).reverse(),
           y= sliced.map(item=>item[0]).reverse(),
@@ -506,11 +512,11 @@ var variables = [department, status, source , year];
           x2 = data1.map(data => data['creation_month-day']);
           y2 = data1.map(data => data['days_to_close']);
           groups= data1.map(data => data['creation_month-day'])
-      
+          // console.log(x1);
       updateBar(x,y,text);
       updatePie(values,labels,domain);
-      updateLine1(x,y,groups);
-      updateLine2(x,y,groups);
+      updateLine1(x1,y1,groups);
+      updateLine2(x2,y2,groups);
       updateMap();
 
 
@@ -543,14 +549,14 @@ function updatePie(values,labels,domain) {
   Plotly.restyle("pie","domain",[domain]);
 }
 
-function updateLine1(x,y,groups) {
+function updateLine1(x1,y1,groups) {
   
   Plotly.restyle("line1","x",[x1]);
   Plotly.restyle("line1","y",[y1]);
   Plotly.restyle("line1","groups",[groups]);   
 }
 
-function updateLine2(x,y,groups) {
+function updateLine2(x2,y2,groups) {
   
   Plotly.restyle("line2","x",[x2]);
   Plotly.restyle("line2","y",[y2]);
@@ -561,7 +567,7 @@ function updateMap(){
 
   var url = createQuery(variables);
 
-  d3.json(url).then(json_data => {
+  d3.json(url).then(data => {
 
     var container = L.DomUtil.get('map');
     if(container != null){
@@ -587,7 +593,7 @@ function updateMap(){
 
       
       // extracting the zip code from json_data and the grouping by zipcode to see the number of call counts per zipcode
-      var zipCode = json_data.map(row => row.zip_code);
+      var zipCode = data.map(row => row.zip_code);
       var countCalls = [];
         var countCalls = zipCode.reduce((total, value) => {
           total[value] = (total[value] || 0) + 1;
@@ -605,7 +611,7 @@ function updateMap(){
       var data_filter =[];
       var lat = [];
       for (i=0;i< zipcode_unique.length ;i++){
-        data_filter.push(json_data.filter( element => element.zip_code == zipcode_unique[i]));
+        data_filter.push(data.filter( element => element.zip_code == zipcode_unique[i]));
         
       }
 
@@ -660,12 +666,12 @@ function updateMap(){
 
 
   var heat = L.heatLayer(heatArray, {
-    radius:10,
-    blur:35,
-    maxZoom:15,
+    radius:20,
+    blur:25,
+    maxZoom:10,
   //   gradient: {
   //     0.0: 'blue',
-  //     // 0.5: 'yellow',
+  //     0.5: 'yellow',
   //     1.0: 'red'
   // }
   }).addTo(myMap);

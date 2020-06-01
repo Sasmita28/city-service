@@ -52,9 +52,13 @@ def query():
 
     #from the string, back out the dictionary
     mongo_query_dict = ast.literal_eval(mongo_query_string) 
-
-    # pass the dictionary to the query
-    calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(1150000))
+    print(mongo_query_dict)
+    if mongo_query_dict == {}:
+       # pass the dictionary to the query
+        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(100000)) 
+    else:
+        # pass the dictionary to the query
+        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(1150000))
 
     # jsonify the response
     return jsonify(calls_info)
