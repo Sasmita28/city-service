@@ -1,0 +1,1 @@
+FLASK_APP=citi_data/app.py flask run
