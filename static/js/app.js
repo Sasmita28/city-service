@@ -71,7 +71,11 @@ function buildChart() {
   var url = createQuery(variables);
   d3.json(url).then(json_data => {
   console.log(url)
+<<<<<<< Updated upstream:static/js/app.js
   console.log(json_data.length);
+=======
+  console.log(data);
+>>>>>>> Stashed changes:citi_data/static/js/app.js
 
 
   //  console.log(data)
@@ -114,7 +118,7 @@ function buildChart() {
       for (var type in result) {
           sortable.push([type, result[type]]);
       }
-      
+      console.log(sortable);
       sortable.sort(function(a, b) {
           return b[1] - a[1];
       });
@@ -128,15 +132,21 @@ function buildChart() {
       || row['type'] == Object.values(sliced)[11][0] || row['type'] == Object.values(sliced)[12][0] || row['type'] == Object.values(sliced)[13][0]
       || row['type'] == Object.values(sliced)[14][0] || row['type'] == Object.values(sliced)[15][0] || row['type'] == Object.values(sliced)[16][0]
       || row['type'] == Object.values(sliced)[17][0] || row['type'] == Object.values(sliced)[18][0] || row['type'] == Object.values(sliced)[19][0]);
-  //  console.log(data1);
+      var data2 = [];
+      for (i=0; i<data1.length; i++) {
+        if (data1[i]['creation_month-day']>='01/01' && data1[i]['creation_month-day']<='12/31') {
+          data2.push(data1[i]);
+        };
+      };
+      console.log(data2);
 
    //Replace All "unknown" Values with None
    //Method Found at https://stackoverflow.com/questions/28263868/how-can-i-replace-the-text-in-json-string-with-a-userscript-for-greasemonkey
-   var stringified = JSON.stringify(data1);
+   var stringified = JSON.stringify(data2);
    stringified = stringified.replace("unknown", null);
    
    //Convert JSON String Back into Object
-   var data1 = JSON.parse(stringified);
+   var data2 = JSON.parse(stringified);
       // *************************************************
 
     initBar();
@@ -170,12 +180,13 @@ function buildChart() {
       // extracting the zip code from json_data and the grouping by zipcode to see the number of call counts per zipcode
       var zipCode = json_data.map(row => row.zip_code);
       var countCalls = [];
-        var countCalls = zipCode.reduce((total, value) => {
+        zipCode.reduce((total, value) => {
           total[value] = (total[value] || 0) + 1;
           countCalls.push(total)
           return total;
           },
         {});
+<<<<<<< Updated upstream:static/js/app.js
 
     // Separating the zipcodes and their counts
     var zipcode_unique = Object.keys(countCalls);
@@ -189,9 +200,24 @@ function buildChart() {
       data_filter.push(json_data.filter( element => element.zip_code == zipcode_unique[i]));
        
     }
+=======
+          console.log(countCalls);
+      // Separating the zipcodes and their counts
+      var zipcode_unique = Object.keys(countCalls);
+      var call_counts = Object.values(countCalls);
+      console.log(zipcode_unique);
+      console.log(call_counts);
+      // filtering json_data for the unique zipcodes
+      var data_filter =[];
+      var lat = [];
+      for (i=0;i< zipcode_unique.length ;i++){
+        data_filter.push(data.filter( element => element.zip_code == zipcode_unique[i]));
+        
+      }
+>>>>>>> Stashed changes:citi_data/static/js/app.js
  
    
-    // console.log(data_filter);
+    console.log(data_filter);
     // Extracting only the latlongs from the array of arrays
 
     var latlons= data_filter.map(arr => arr.map(element => `${element.lat},${element.lon}`) );
@@ -258,13 +284,13 @@ function buildChart() {
    function initLine1() {
     chart_average = [{
       type:'scatter',
-      x: data1.map(data=> data['creation_month-day']),
-      y: data1.map(data =>data['days_to_close']),
+      x: data2.map(data=> data['creation_month-day']),
+      y: data2.map(data =>data['days_to_close']),
       connectgaps: true,
       fill: 'tozeroy',
       transforms: [{
           type: 'aggregate',
-          groups: data1.map(data => data['creation_month-day']), 
+          groups: data2.map(data => data['creation_month-day']), 
           aggregations: [
           {target: 'y', func: 'avg', enabled: true},
           ]
@@ -290,13 +316,13 @@ function buildChart() {
     function initLine2() {
       chart_count = [{
         type:'scatter',
-        x: data1.map(data => data['creation_month-day']),
-        y: data1.map(data => data['days_to_close']),
+        x: data2.map(data => data['creation_month-day']),
+        y: data2.map(data => data['days_to_close']),
         connectgaps: true,
         fill: 'tozeroy',
         transforms: [{
             type: 'aggregate',
-            groups: data1.map(data=> data['creation_month-day']),
+            groups: data2.map(data=> data['creation_month-day']),
             aggregations: [
             {target: 'y', func: 'count', enabled: true},
             ]
@@ -382,10 +408,10 @@ filterDropdown.on("change", function() {
 	var sourceSelect = d3.select("#Source").node().value
 	var deptSelect = d3.select("#Department").node().value
 	var yearSelect = d3.select("#Year").node().value
-	year = yearSelect
-	department = deptSelect
-	status = statusSelect
-	source = sourceSelect
+	var year = yearSelect
+	var department = deptSelect
+	var status = statusSelect
+	var source = sourceSelect
 		
 
 
@@ -404,7 +430,11 @@ var variables = [department, status, source , year];
       
     console.log(url);
     // console.log(data);
+<<<<<<< Updated upstream:static/js/app.js
     console.log(json_data.length);
+=======
+    console.log(data);
+>>>>>>> Stashed changes:citi_data/static/js/app.js
 
       var source = json_data.map(row => row.source);
       var status = json_data.map(row => row.status);
@@ -444,7 +474,7 @@ var variables = [department, status, source , year];
           for (var type in result) {
               sortable.push([type, result[type]]);
           }
-          
+          console.log(sortable);
           sortable.sort(function(a, b) {
               return b[1] - a[1];
           });
@@ -459,15 +489,22 @@ var variables = [department, status, source , year];
           || row['type'] == Object.values(sliced)[11][0] || row['type'] == Object.values(sliced)[12][0] || row['type'] == Object.values(sliced)[13][0]
           || row['type'] == Object.values(sliced)[14][0] || row['type'] == Object.values(sliced)[15][0] || row['type'] == Object.values(sliced)[16][0]
           || row['type'] == Object.values(sliced)[17][0] || row['type'] == Object.values(sliced)[18][0] || row['type'] == Object.values(sliced)[19][0]);
-          //  console.log(data1);
+          var data2 = []
+          for (i=0; i<data1.length; i++) {
+            if (data1[i]['creation_month-day']>='01/01' && data1[i]['creation_month-day']<='12/31') {
+              data2.push(data1[i]);
+            };
+          };
+          var data2 = data2.sort((a, b) => a['creation_month-day'].localeCompare(b['creation_month-day']));
+          console.log(data2);
 
           //Replace All "unknown" Values with None
           //Method Found at https://stackoverflow.com/questions/28263868/how-can-i-replace-the-text-in-json-string-with-a-userscript-for-greasemonkey
-          var stringified = JSON.stringify(data1);
+          var stringified = JSON.stringify(data2);
           stringified = stringified.replace("unknown", null);
    
           //Convert JSON String Back into Object
-          var data1 = JSON.parse(stringified);
+          var data2 = JSON.parse(stringified);
           // *************************************************
           
         
@@ -482,12 +519,21 @@ var variables = [department, status, source , year];
           labels= labels,
           domain= {column: 0}
 
+<<<<<<< Updated upstream:static/js/app.js
           x1 = data1.map(data => data['creation_month-day']);
           y1 = data1.map(data => data['days_to_close']);
           x2 = data1.map(data => data['creation_month-day']);
           y2 = data1.map(data => data['days_to_close']);
           groups= data1.map(data => data['creation_month-day'])
       
+=======
+          x1 = data2.map(data => data['creation_month-day']);
+          y1 = data2.map(data => data['days_to_close']);
+          x2 = data2.map(data => data['creation_month-day']);
+          y2 = data2.map(data => data['days_to_close']);
+          groups= data2.map(data => data['creation_month-day'])
+          // console.log(x1);
+>>>>>>> Stashed changes:citi_data/static/js/app.js
       updateBar(x,y,text);
       updatePie(values,labels,domain);
       updateLine1(x,y,groups);
@@ -533,4 +579,128 @@ function updateLine2(x,y,groups) {
   Plotly.restyle("line2","x",[x2]);
   Plotly.restyle("line2","y",[y2]);
   Plotly.restyle("line2","groups",[groups]);   
+<<<<<<< Updated upstream:static/js/app.js
+=======
+}
+
+function updateMap(){
+
+  var url = createQuery(variables);
+
+  d3.json(url).then(data => {
+
+    var container = L.DomUtil.get('map');
+    if(container != null){
+    container._leaflet_id = null;
+    }
+
+    // myMap.invalidateSize()
+    // var container = L.DomUtil.get('map');if(container != null ) {container.leaflet_id = null;}
+      // Create a map object
+      var myMap =L.map("map", {
+        center: [39.0997, -94.5786],
+        zoom: 13
+      });
+
+      L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox.light",
+        // tileSize: 60,
+        // zoomOffset: -1,  
+        accessToken: API_KEY
+      }).addTo(myMap);
+
+      
+      // extracting the zip code from json_data and the grouping by zipcode to see the number of call counts per zipcode
+      var zipCode = data.map(row => row.zip_code);
+      var countCalls = [];
+        zipCode.reduce((total, value) => {
+          total[value] = (total[value] || 0) + 1;
+          countCalls.push(total)
+          return total;
+          },
+        {});
+          console.log(countCalls);
+      // Separating the zipcodes and their counts
+      var zipcode_unique = Object.keys(countCalls);
+      var call_counts = Object.values(countCalls);
+      //  console.log(zipcode_unique[0]);
+    
+      // filtering json_data for the unique zipcodes
+      var data_filter =[];
+      var lat = [];
+      for (i=0;i< zipcode_unique.length ;i++){
+        data_filter.push(data.filter( element => element.zip_code == zipcode_unique[i]));
+        
+      }
+
+  
+    // console.log(data_filter);
+    // Extracting only the latlongs from the array of arrays
+
+    var latlons= data_filter.map(arr => arr.map(element => `${element.lat},${element.lon}`) );
+
+
+  
+    // console.log(data_filter);
+    
+    
+    // making these latlong elements as list and converting them to numbers again
+  var latlong1 =latlons.map(arr => arr.map(element => ([element])));
+
+  
+    var latlong2 = latlong1.map(arr =>arr.map(element => (element[0].split(',').map(x=>+x))) );
+
+    
+  //  Extracting the lats and longs separately
+    var lat = latlong2.map(num =>num.map(item=> item[0]));
+    var long = latlong2.map(num =>num.map(item=> item[1]));
+
+    // console.log(lat);
+    // for (var i = 0; i < zipcode_unique.length; i++) {
+              
+    //       L.marker([lat[i][0], long[i][0]]).bindPopup("<h5><h5>Zip: "  + zipcode_unique[i] + "</h5>"+ "<h5><h5>Call Count: " + call_counts[i] + "</h5>").addTo(myMap);
+    //       // console.log([lat[i][0]]);
+    
+    
+    // }
+  // Initializing the heat array
+    var heatArray = [];
+      
+    for (var i = 0; i < zipcode_unique.length; i++) {
+      for( var j= 0; j< call_counts[i];j++){
+
+        var location = latlong2[i];
+
+        if (location) {
+          heatArray.push([location[j][0], location[j][1]]);
+          
+          // console.log([location[j][1]]);
+        }
+      }
+      
+    }
+
+  //  console.log(heatArray);
+
+
+  var heat = L.heatLayer(heatArray, {
+    radius:20,
+    blur:25,
+    maxZoom:10,
+  //   gradient: {
+  //     0.0: 'blue',
+  //     0.5: 'yellow',
+  //     1.0: 'red'
+  // }
+  }).addTo(myMap);
+
+
+
+   
+
+  });
+
+>>>>>>> Stashed changes:citi_data/static/js/app.js
 }
