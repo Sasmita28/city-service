@@ -1,0 +1,2 @@
+*.csv filter=lfs diff=lfs merge=lfs -text
+Resources/311_Call_Center_Service_Requests.csv filter=lfs diff=lfs merge=lfs -text

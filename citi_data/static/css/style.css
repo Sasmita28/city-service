@@ -1,0 +1,39 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+#map,
+body,
+html {
+  height: 100%;
+}
+
+.wrapper {
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 130px;
+  overflow: auto;
+}
+.table-primary {
+  font-weight: bold;
+}
+.footer > .bottom {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 5px;
+  background: #1B3146;
+}
+.hero {
+  position: relative;
+  height: 450px;
+  padding: 20px;
+  margin: 0;
+  background: rgb(19, 130, 145);
+  background-image: url("kcsky2.jpeg");
+  background-attachment: scroll;
+  background-position: bottom center;
+  background-size: cover;
+}

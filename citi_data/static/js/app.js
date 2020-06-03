@@ -1,3 +1,5 @@
+
+
 var department="ignore"
 var status="ignore"
 var source="ignore"
@@ -186,21 +188,28 @@ function buildChart() {
       //// Separating the zipcodes and their counts
       //var zipcode_unique = Object.keys(countCalls);
       //var call_counts = Object.values(countCalls);
-      //console.log(zipcode_unique);
-      //console.log(call_counts);
-      // filtering json_data for the unique zipcodes
 
       //Create Empty Array for Unique ZipCodes
-      var zipcode_unique = [data[0].zip_code];
+      var zipcode_unique = [data[0]["zip code"]];
       console.log(zipcode_unique);
       //Compile Array of Unique ZipCodes
       for (i=1; i<data.length; i++) {
-        if (data[i].zip_code != data[i-1].zip_code) {
-          zipcode_unique.push(data[i-1].zip_code)
+        if (data[i]["zip code"] != data[i-1]["zip code"]) {
+          zipcode_unique.push(data[i-1]["zip code"])
         };
       };
       console.log(zipcode_unique);
 
+      var data_filter =[];
+      var lat = [];
+      for (i=0;i< zipcode_unique.length ;i++){
+        data_filter.push(data.filter( element => element["zip code"] == zipcode_unique[i]));
+        
+      }
+   
+      console.log(data_filter);
+
+      // filtering json_data for the unique zipcodes
       var data_filter =[];
       var lat = [];
       for (i=0;i< zipcode_unique.length ;i++){
@@ -213,8 +222,6 @@ function buildChart() {
     // Extracting only the latlongs from the array of arrays
 
     var latlons= data_filter.map(arr => arr.map(element => `${element.lat},${element.lon}`) );
-
-
    
     // console.log(data_filter);
     
