@@ -8,10 +8,11 @@ from flask import Flask
 MONGO_URL = os.environ.get('MONGO_URL')
 if not MONGO_URL:
 
-    MONGO_URL =  "mongodb+srv://kansascity311data:datadashboard@cluster0-04po8.mongodb.net/citi_data?retryWrites=true&w=majority"
+    MONGO_URL =  "mongodb://localhost:27017"
    
 
 app = Flask(__name__)
+
 
 app.config['MONGO_URI'] = MONGO_URL
 client = pymongo.MongoClient(MONGO_URL)

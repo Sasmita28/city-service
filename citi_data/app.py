@@ -12,12 +12,15 @@ app = Flask(__name__)
 MONGO_URL = os.environ.get('MONGO_URL')
 if not MONGO_URL:
 
-    MONGO_URL = "mongodb+srv://kansascity311data:MKCTaarav@cluster0-m28cw.mongodb.net/test"
+    MONGO_URL = "mongodb://localhost:27017"
 
 app = Flask(__name__)
 
 app.config['MONGO_URI'] = MONGO_URL
 client = pymongo.MongoClient(MONGO_URL)
+
+
+
 
 # conn = "mongodb://localhost:27017"
 
