@@ -1,7 +1,7 @@
 import pymongo
 import pandas as pd
 import os
-from  flask  import Flask
+from flask import Flask
 import pymongo
 
 #GET DATA
@@ -62,19 +62,11 @@ citi_df_mod["department"] = citi_df_mod["department"].str.replace("Parks & Rec",
 citi_df_mod["department"] = citi_df_mod["department"].str.replace("Parks and Rec","Parks & Recreation")
 
 # # Setup connection to mongodb
-# conn = "mongodb://localhost:27017"
-# client = pymongo.MongoClient(conn)
-# setup mongo connection
 
-MONGO_URL = os.environ.get('MONGO_URL')
-if not MONGO_URL:
 
-    MONGO_URL = "mongodb://heroku_zfsn3qks:c1hld8ptmpggthea742tcbuc95@ds131109.mlab.com:31109/heroku_zfsn3qks"
 
-app = Flask(__name__)
-
-app.config['MONGO_URI'] = MONGO_URL
-client = pymongo.MongoClient(MONGO_URL)
+conn = "mongodb://localhost:27017"
+client = pymongo.MongoClient(conn)
 
 # Select database and collection to use
 client.drop_database('citi_data')

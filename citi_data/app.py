@@ -9,21 +9,9 @@ app = Flask(__name__)
 
 # setup mongo connection
 
-MONGO_URL = os.environ.get('MONGO_URL')
-if not MONGO_URL:
 
-    MONGO_URL = "mongodb://heroku_zfsn3qks:c1hld8ptmpggthea742tcbuc95@ds131109.mlab.com:31109/heroku_zfsn3qks"
-
-app = Flask(__name__)
-
-app.config['MONGO_URI'] = MONGO_URL
-client = pymongo.MongoClient(MONGO_URL)
-
-
-
-
-# conn = "mongodb://localhost:27017"
-
+conn = "mongodb://localhost:27017"
+client = pymongo.MongoClient(conn)
 
 # connect to mongo db and collection
 db = client.citi_data
@@ -70,7 +58,7 @@ def query():
     print(mongo_query_dict)
     if mongo_query_dict == {}:
        # pass the dictionary to the query
-        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(100000)) 
+        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(500000)) 
     else:
         # pass the dictionary to the query
         calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(1150000))
