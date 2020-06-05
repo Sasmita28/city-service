@@ -1,1 +1,1 @@
-FLASK_APP=citi_data_mLab/app.py flask run
+FLASK_APP=citi_data/app.py flask run
