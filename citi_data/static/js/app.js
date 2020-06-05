@@ -257,7 +257,7 @@ function buildChart() {
 
   var heat = L.heatLayer(heatArray, {
     radius:10,
-    blur:15,
+    blur:18,
     maxZoom:15
   }).addTo(myMap);
 
@@ -344,40 +344,40 @@ function buildChart() {
       }];
     
       var layout = {
-        title: 'No.of calls per request',
-        // showlegend: false
+        title: '<b>'+'No.of calls per request'+'</b>',
+        yaxis: {
+          automargin: true
+          }
         };
     
       var config = {responsive: true}
       Plotly.newPlot("bar", data, layout, config);
-      // Plotly.newPlot("bar", data, layout);
-     
     };
    // ************* End bar chart **********************************
 
   // ************* for Pie chart ***********************************
-    function initPie() {
+  function initPie() {
 
-      var data = [{
-        values: values,
-        labels: labels,
-        domain: {column: 0},
-        name: 'Department',
-        hoverinfo: 'label+percent',
-        textinfo: "none",
-        hole: .4,
-        type: 'pie'
-    }];
-      
-      var layout = {
-      title: 'Percent Share of 311 Incidences by Department',
-      showlegend: false
-      };
-      
-      var config = {responsive: true}
-      Plotly.newPlot("pie", data, layout, config);
-      // Plotly.newPlot("pie", data, layout);
+    var data = [{
+      values: values,
+      labels: labels,
+      domain: {column: 0},
+      name: 'Department',
+      hoverinfo: 'label+percent',
+      textinfo: "none",
+      hole: .4,
+      marker:{
+        colors: ['#DC97A9', '#F2CB7C', '#EDAF88', '#D3BFB6', '#ADDAD7','#DC97A9', '#F2CB7C', '#EDAF88', '#D3BFB6', '#ADDAD7', '#DC97A9', '#F2CB7C', '#EDAF88', '#D3BFB6', '#ADDAD7','#DC97A9', '#F2CB7C', '#EDAF88', '#D3BFB6', '#ADDAD7'].reverse()
+      },
+      type: 'pie'
+  }];
+    var layout = {
+    title: '<b>'+'Percent Share of 311 Incidences by Department'+'</b>',
+    showlegend: true
     };
+    var config = {responsive: true}
+    Plotly.newPlot("pie", data, layout, config);
+  };
    // ************* End Pie chart **********************************
 
   });
@@ -668,7 +668,7 @@ function updateMap(){
 
   var heat = L.heatLayer(heatArray, {
     radius:10,
-    blur:15,
+    blur:18,
     maxZoom:15
   }).addTo(myMap);
 
