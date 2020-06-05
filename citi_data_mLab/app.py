@@ -4,15 +4,17 @@ import pymongo
 import json
 import ast
 import os
+# from config1 import password,username
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 # setup mongo connection
 
 MONGO_URL = os.environ.get('MONGO_URL')
 if not MONGO_URL:
 
-    MONGO_URL = "mongodb+srv://kansascity311data:MKCTaarav@cluster0-m28cw.mongodb.net/test"
+    MONGO_URL =  "mongodb+srv://kansascity311data:datadashboard@cluster0-04po8.mongodb.net/citi_data?retryWrites=true&w=majority"
+   
 
 app = Flask(__name__)
 
@@ -20,7 +22,7 @@ app.config['MONGO_URI'] = MONGO_URL
 client = pymongo.MongoClient(MONGO_URL)
 
 # conn = "mongodb://localhost:27017"
-
+# client = pymongo.MongoClient(conn)
 
 # connect to mongo db and collection
 db = client.citi_data
@@ -67,10 +69,10 @@ def query():
     print(mongo_query_dict)
     if mongo_query_dict == {}:
        # pass the dictionary to the query
-        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(100000)) 
+        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(500000)) 
     else:
         # pass the dictionary to the query
-        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(1150000))
+        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(1000000))
 
     # jsonify the response
     return jsonify(calls_info)
