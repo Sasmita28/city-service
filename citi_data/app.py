@@ -12,7 +12,7 @@ app = Flask(__name__)
 MONGO_URL = os.environ.get('MONGO_URL')
 if not MONGO_URL:
 
-    MONGO_URL = "mongodb://localhost:27017"
+    MONGO_URL = "mongodb://heroku_zfsn3qks:c1hld8ptmpggthea742tcbuc95@ds131109.mlab.com:31109/heroku_zfsn3qks"
 
 app = Flask(__name__)
 
