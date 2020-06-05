@@ -1,3 +1,5 @@
+
+
 var department="ignore"
 var status="ignore"
 var source="ignore"
@@ -160,7 +162,7 @@ function buildChart() {
       // Create a map object
       var myMap = L.map("map", {
         center: [39.0997, -94.5786],
-        zoom: 13
+        zoom: 10
       });
 
       L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -172,49 +174,44 @@ function buildChart() {
         accessToken: API_KEY
       }).addTo(myMap);
 
-      
-      //// extracting the zip code from json_data and the grouping by zipcode to see the number of call counts per zipcode
-      //var zipCode = json_data.map(row => row.zip_code);
-      //var countCalls = [];
-        //zipCode.reduce((total, value) => {
-          //total[value] = (total[value] || 0) + 1;
-          //countCalls.push(total)
-          //return total;
-          //},
-        //{});
-          //console.log(countCalls);
-      //// Separating the zipcodes and their counts
-      //var zipcode_unique = Object.keys(countCalls);
-      //var call_counts = Object.values(countCalls);
-      //console.log(zipcode_unique);
-      //console.log(call_counts);
-      // filtering json_data for the unique zipcodes
-
       //Create Empty Array for Unique ZipCodes
-      var zipcode_unique = [data[0].zip_code];
+      var zipcode_unique = [data[0]["zip code"]];
       console.log(zipcode_unique);
       //Compile Array of Unique ZipCodes
-      for (i=1; i<data.length; i++) {
-        if (data[i].zip_code != data[i-1].zip_code) {
-          zipcode_unique.push(data[i-1].zip_code)
-        };
+      //Loop Through the Rows of Data with the Top 20 Types
+      for (i=0; i<data2.length; i++) {
+        //Loop Through the Array Containing the Unique Zipcodes
+        for (j=0; j<zipcode_unique.length; j++) {
+          //Check to See if the zipcode_unique array Already Contains the Zipcode Value from the data2 row
+          if (zipcode_unique.includes(data2[i]["zip code"])) {
+          }
+          else {
+            //If it Doesn't Push the Current Zipcode Value onto the Array
+            //Method Found at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+            zipcode_unique.push(data2[i]["zip code"])
+          };
+        }
       };
+      //Sort Zipcodes in Ascending Order
+      zipcode_unique.sort((a, b) => a - b)
       console.log(zipcode_unique);
 
+
+      // Return Rows Containing the unique zipcodes
       var data_filter =[];
       var lat = [];
-      for (i=0;i< zipcode_unique.length ;i++){
-        data_filter.push(data.filter( element => element.zip_code == zipcode_unique[i]));
-        
-      }
+      var call_counts = [];
+      for (i=0; i< zipcode_unique.length; i++){
+        data_filter.push(data2.filter( element => element["zip code"] == zipcode_unique[i]));
+        call_counts.push(data_filter[i].length)
+      };
  
    
     console.log(data_filter);
+    console.log(call_counts);
     // Extracting only the latlongs from the array of arrays
 
     var latlons= data_filter.map(arr => arr.map(element => `${element.lat},${element.lon}`) );
-
-
    
     // console.log(data_filter);
     
@@ -231,13 +228,13 @@ function buildChart() {
     var long = latlong2.map(num =>num.map(item=> item[1]));
   
     // console.log(lat);
-    for (var i = 0; i < zipcode_unique.length; i++) {
-        if (zipcode_unique && call_counts)
-          L.marker([lat[i][0], long[i][0]]).bindPopup("<h5><h5>Zip: "  + zipcode_unique[i] + "</h5>"+ "<h5><h5>Call Count: " + call_counts[i] + "</h5>").addTo(myMap);
-          // console.log([lat[i][0]]);
-    
-     
-    }
+    //for (var i = 0; i < zipcode_unique.length; i++) {
+        //if (zipcode_unique && call_counts)
+          //L.marker([lat[i][0], long[i][0]]).bindPopup("<h5><h5>Zip: "  + zipcode_unique[i] + "</h5>"+ "<h5><h5>Call Count: " + call_counts[i] + "</h5>").addTo(myMap);
+          //// console.log([lat[i][0]]);
+//    
+//     
+    //}
   // Initializing the heat array
     var heatArray = [];
       
@@ -260,7 +257,7 @@ function buildChart() {
 
   var heat = L.heatLayer(heatArray, {
     radius:10,
-    blur:35,
+    blur:15,
     maxZoom:15
   }).addTo(myMap);
 
@@ -422,7 +419,7 @@ var variables = [department, status, source , year];
       
     console.log(url);
     // console.log(data);
-    console.log(data);
+    console.log(json_data);
 
       var source = json_data.map(row => row.source);
       var status = json_data.map(row => row.status);
@@ -587,61 +584,68 @@ function updateMap(){
         // zoomOffset: -1,  
         accessToken: API_KEY
       }).addTo(myMap);
-
-      
-      // extracting the zip code from json_data and the grouping by zipcode to see the number of call counts per zipcode
-      var zipCode = data.map(row => row.zip_code);
-      var countCalls = [];
-        zipCode.reduce((total, value) => {
-          total[value] = (total[value] || 0) + 1;
-          countCalls.push(total)
-          return total;
-          },
-        {});
-          console.log(countCalls);
-      // Separating the zipcodes and their counts
-      var zipcode_unique = Object.keys(countCalls);
-      var call_counts = Object.values(countCalls);
-      //  console.log(zipcode_unique[0]);
     
-      // filtering json_data for the unique zipcodes
+      //Create Empty Array for Unique ZipCodes
+      var zipcode_unique = [data[0]["zip code"]];
+      console.log(zipcode_unique);
+      //Compile Array of Unique ZipCodes
+      //Loop Through the Rows of Data with the Top 20 Types
+      for (i=0; i<data2.length; i++) {
+        //Loop Through the Array Containing the Unique Zipcodes
+        for (j=0; j<zipcode_unique.length; j++) {
+          //Check to See if the zipcode_unique array Already Contains the Zipcode Value from the data2 row
+          if (zipcode_unique.includes(data2[i]["zip code"])) {
+          }
+          else {
+            //If it Doesn't Push the Current Zipcode Value onto the Array
+            //Method Found at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+            zipcode_unique.push(data2[i]["zip code"])
+          };
+        }
+      };
+      //Sort Zipcodes in Ascending Order
+      zipcode_unique.sort((a, b) => a - b)
+      console.log(zipcode_unique);
+
+
+      // Return Rows Containing the unique zipcodes
       var data_filter =[];
       var lat = [];
-      for (i=0;i< zipcode_unique.length ;i++){
-        data_filter.push(data.filter( element => element.zip_code == zipcode_unique[i]));
-        
-      }
-
-  
-    // console.log(data_filter);
+      var call_counts = [];
+      for (i=0; i< zipcode_unique.length; i++){
+        data_filter.push(data2.filter( element => element["zip code"] == zipcode_unique[i]));
+        call_counts.push(data_filter[i].length)
+      };
+ 
+   
+    console.log(data_filter);
+    console.log(call_counts);
     // Extracting only the latlongs from the array of arrays
 
     var latlons= data_filter.map(arr => arr.map(element => `${element.lat},${element.lon}`) );
-
-
-  
+   
     // console.log(data_filter);
     
     
     // making these latlong elements as list and converting them to numbers again
-  var latlong1 =latlons.map(arr => arr.map(element => ([element])));
+   var latlong1 =latlons.map(arr => arr.map(element => ([element])));
 
-  
+   
     var latlong2 = latlong1.map(arr =>arr.map(element => (element[0].split(',').map(x=>+x))) );
 
     
   //  Extracting the lats and longs separately
     var lat = latlong2.map(num =>num.map(item=> item[0]));
     var long = latlong2.map(num =>num.map(item=> item[1]));
-
+  
     // console.log(lat);
-    // for (var i = 0; i < zipcode_unique.length; i++) {
-              
-    //       L.marker([lat[i][0], long[i][0]]).bindPopup("<h5><h5>Zip: "  + zipcode_unique[i] + "</h5>"+ "<h5><h5>Call Count: " + call_counts[i] + "</h5>").addTo(myMap);
-    //       // console.log([lat[i][0]]);
-    
-    
-    // }
+    //for (var i = 0; i < zipcode_unique.length; i++) {
+        //if (zipcode_unique && call_counts)
+          //L.marker([lat[i][0], long[i][0]]).bindPopup("<h5><h5>Zip: "  + zipcode_unique[i] + "</h5>"+ "<h5><h5>Call Count: " + call_counts[i] + "</h5>").addTo(myMap);
+          //// console.log([lat[i][0]]);
+//    
+//     
+    //}
   // Initializing the heat array
     var heatArray = [];
       
@@ -649,7 +653,7 @@ function updateMap(){
       for( var j= 0; j< call_counts[i];j++){
 
         var location = latlong2[i];
-
+  
         if (location) {
           heatArray.push([location[j][0], location[j][1]]);
           
@@ -658,19 +662,14 @@ function updateMap(){
       }
       
     }
-
+  
   //  console.log(heatArray);
-
+  
 
   var heat = L.heatLayer(heatArray, {
-    radius:20,
-    blur:25,
-    maxZoom:10,
-  //   gradient: {
-  //     0.0: 'blue',
-  //     0.5: 'yellow',
-  //     1.0: 'red'
-  // }
+    radius:10,
+    blur:15,
+    maxZoom:15
   }).addTo(myMap);
 
 

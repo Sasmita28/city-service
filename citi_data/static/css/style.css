@@ -3,37 +3,130 @@ body {
   margin: 0;
 }
 
-#map,
+/* #map,
 body,
 html {
   height: 100%;
-}
-
-.wrapper {
-  position: relative;
-  min-height: 100%;
-  padding-bottom: 130px;
-  overflow: auto;
-}
-.table-primary {
-  font-weight: bold;
-}
-.footer > .bottom {
+  width: 100%;
+} */
+/* 
+.footer {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 5px;
-  background: #1B3146;
-}
+  background-image: url("kcicon.jpeg");
+} */
 .hero {
   position: relative;
-  height: 450px;
+  height: 500px;
   padding: 20px;
   margin: 0;
-  background: rgb(19, 130, 145);
   background-image: url("kcsky2.jpeg");
   background-attachment: scroll;
-  background-position: bottom center;
+  background-position: center;
   background-size: cover;
+}
+
+
+.form-group {
+  text-align: center;
+
+}
+
+.container {
+  max-width: 100%;
+  object-fit: cover;
+}
+
+
+#banner {
+  background-color: rgb(61, 113, 190);
+  height: 55px;
+}
+
+h1 {
+  font-family:Georgia;
+  font-size: 20px;
+  color: white;
+  height: 50px;
+  width: 100%;
+  position: relative;
+  margin-top: 14px;
+}
+
+
+#dropdown {
+  width: 65%;
+  margin: auto;
+
+}
+
+#map {
+  max-width: 75%;
+  height:700px;
+  margin: auto;
+  border: black;
+  object-fit: cover;
+ }
+
+#bar {
+  width: 100%;
+  height: 802px;
+  margin: auto;
+  position: relative;
+  object-fit: cover;
+  
+ 
+}
+
+#pie {
+  width: 100%;
+  height: 802px;
+  margin: auto;
+  position: relative;
+  object-fit: cover;
+  
+}
+
+
+#line1 {
+  width: 100%;
+  height: 650px;
+  object-fit: cover;
+  position: relative;
+  margin: auto;
+  
+}
+
+#line2 {
+  width: 100%;
+  height: 650px;
+  object-fit: cover;
+  position: relative;
+  margin: auto;
+  
+
+}
+
+#description {  font-family:Georgia;
+}
+
+p {  
+  font-family:Georgia;
+  font-size: 20px;
+  color: black;
+  /* height: 50px; */
+  /* width: 100%; */
+  /* position: relative; */
+  margin-top: 0px;
+  width: 85%;
+}
+
+
+li {  
+  font-family:Georgia;
+  font-size: 20px;
+  color: black;
+  /* height: 50px; */
+  /* width: 100%; */
+  /* position: relative; */
+  margin-top: 0px;
 }
