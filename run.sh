@@ -1,0 +1,1 @@
+FLASK_APP=citi_data_heroku/app.py flask run
