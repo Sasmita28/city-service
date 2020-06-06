@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Citi Data</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/yeti.min.css">
+  <link rel="stylesheet" href="../static/css/style.css">
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+  integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+  crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+  integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+  crossorigin=""></script>
+
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="hero col-lg-12"></div>
+    </div>
+    <div class= "row">
+      <div class="col-lg-12"id="banner">
+        <h1>Kansas City 311 Dashboard</h1>
+      </div>  
+    </div> 
+    <div class= "row">
+      <div class="col-lg-12" id="description">
+      <br>
+      <p> Keeping a city running takes communication by it's people and action from it's leaders.<p>
+
+        <p style="width: 85%;">A project was undertaken to evaluate the types of issues our city faces, the frequency that they occur, and the efficiency of our public services to fix them.
+        To do this, we incorporated data from the Kansas City 311 Call Center and used a set of relevant filters.  The 311 call center receives all types of service 
+        requests for all of the cities' departments.  We pulled in the data from the<a href="https://data.kcmo.org/311/311-Call_Center-Service-Requests/7at3-sxhp"> Opendata KC website</a> and 
+        applied the filters that follow:</p>
+        <ul>
+          <li><strong>Year:</strong> This is the year a service request was created.</li>
+          <li><strong>Status:</strong> This is the progress of the request resolution.</li>
+          <li><strong>Source:</strong>  This is the method by which the city was notified of the issue.</li>
+          <li><strong>Department:</strong>  This is the sector of city government that is tasked with resolving the issue.</li>
+        </ul>
+      <p>Charts and visual aids were created to look at the average days needed to close on requests as well as the amount of calls made and the breakdown by department 
+        for each set of filters.</p>
+      <!-- </p> -->
+      </div>
+    </div>
+    <br>
+  <div class="row" id="dropdown">
+    <div class="col-lg-3">
+      <div class="form-group">
+        <label for="Year"><strong>Year</strong></label>
+        <select class="form-control" id="Year">
+          <option value="ignore"></option>
+          <option value="2020">2020</option>
+          <option value="2019">2019</option>
+          <option value="2018">2018</option>
+          <option value="2017">2017</option>
+          <option value="2016">2016</option>
+          <option value="2015">2015</option>
+          <option value="2014">2014</option>
+          <option value="2013">2013</option>
+          <option value="2012">2012</option>
+          <option value="2011">2011</option>
+          <option value="2010">2010</option>
+          <option value="2009">2009</option>
+          <option value="2008">2008</option>
+          <option value="2007">2007</option>
+          <option value="2006">2006</option>
+          
+        </select>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="form-group">
+        <label for="Status"><strong>Status</strong></label>
+        <select class="form-control" id="Status">
+          <option value="ignore"></option>
+          <option value="Open">Open</option>
+          <option value="Resolved">Resolved</option>
+          <option value="Duplicate">Duplicate</option>
+          <option value="Assigned">Assigned</option>
+          <option value="Cancelled">Cancelled</option>
+          <option value="Failed">Failed</option>
+          <option value="On Hold">On Hold</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="form-group">
+        <label for="Source"><strong>Source</strong></label>
+        <select class="form-control" id="Source">
+          <option value="ignore"></option>
+          <option value="Phone">Phone</option>
+          <option value="Online">Online</option>
+          <option value="Email">Email</option>
+          <option value="Mail">Mail</option>
+          <option value="Walk-in">Walk-in</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="form-group">
+        <label for="Department"><strong>Department</strong></label>
+        <select class="form-control" id="Department">
+          <option value="ignore"></option>
+          <option value="Aviation">Aviation</option>
+          <option value="City Managers Office">City Managers Office</option>
+          <option value="City Planning and Development">City Planning and Development</option>
+          <option value="Convention and Entertainment Center">Convention and Entertainment Center</option>
+          <option value="Finance">Finance</option>
+          <option value="Fire">Fire</option>
+          <option value="General Service">General Service</option>
+          <option value="Health">Health</option>
+          <option value="Housing Community Dev">Housing Community Dev</option>
+          <option value="Information Technology">Information Technology</option>
+          <option value="Police">Police</option>
+          <option value="Municipal Court">Municipal Court</option>
+          <option value="NCS">NCS</option>
+          <option value="NHS">NHS</option>
+          <option value="Northeast">Northeast</option>
+          <option value="Northland">Northland</option>
+          <option value="Parks & Recreation">Parks & Recreation</option>
+          <option value="Parks & Rec">Parks & Rec</option>
+          <option value="Public Works">Public Works</option>
+          <option value="South">South</option>
+          <option value="Water Services">Water Services</option>
+        </select>
+      </div>
+    </div>
+  </div>
+    <div class= "row">
+      <div class="col-lg-12">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12" id="map"></div>
+    </div>
+    <div class= "row">
+      <div class="col-lg-12"></div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 border border-dark" id="pie"></div>
+      <div class="col-lg-6 border border-dark" id="bar"></div>
+      
+    </div>
+    <div class= "row">
+      <div class="col-lg-12"></div>
+    </div>
+    <div class="row" id="linerow">
+      <div class="col-lg-6 border border-dark" id="line1"></div>
+      <div class="col-lg-6 border border-dark" id="line2"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script type="text/javascript" src="../static/js/leaflet-heat.js"></script>
+  <script src="../static/js/config.js"></script>
+  <script src="../static/js/app.js"></script>
+</body>
+
+</html>
