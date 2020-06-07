@@ -76,7 +76,8 @@ app = Flask(__name__)
 
 
 
-client = pymongo.MongoClient("mongodb+srv://kansascity311data:datadashboard@cluster0-04po8.mongodb.net/citi_data?retryWrites=true&w=majority")
+# client = pymongo.MongoClient("mongodb+srv://kansascity311data:datadashboard@cluster0-04po8.mongodb.net/citi_data?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb://heroku_8wr7d3w5:data311dashboard@ds017173.mlab.com:17173/heroku_8wr7d3w5")
 client.drop_database('citi_data')
 db = client.citi_data
 
