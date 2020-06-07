@@ -72,10 +72,10 @@ def query():
     # print(mongo_query_dict)
     if mongo_query_dict == {}:
     # pass the dictionary to the query
-        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(1000)) 
+        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(10000)) 
     else:
         # pass the dictionary to the query
-        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(1000))
+        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(10000))
 
         # jsonify the response
     return jsonify(calls_info)
