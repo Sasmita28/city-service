@@ -84,8 +84,10 @@ function buildChart() {
   // filterYear();
   var url = createQuery(variables);
   d3.json(url).then(data => {
-  console.log(url)
-  console.log(data.length);
+    console.log("Hello Heroku!")
+
+    console.log(url)
+    console.log(data.length);
 
 
   //  console.log(data)
