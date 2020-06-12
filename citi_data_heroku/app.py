@@ -75,7 +75,7 @@ def query():
         calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(7500)) 
     else:
         # pass the dictionary to the query
-        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(15000))
+        calls_info = list(calls.find(mongo_query_dict,  {'_id': 0}).limit(7500))
 
         # jsonify the response
     return jsonify(calls_info)
